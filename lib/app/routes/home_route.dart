@@ -6,8 +6,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_demo/app/db/beans/img_bean.dart';
 import 'package:flutter_demo/app/utils/Log.dart';
-import 'package:flutter_demo/const/Constants.dart';
+import 'package:flutter_demo/const/constants.dart';
 import 'package:flutter_demo/net/bing_api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -20,15 +21,22 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
-  String url = testImgUrl2;
+  ImgBean img = null;
   bool getted = false;
 
   final BingApi bingApi = new BingApi();
 
-  void _updateUrl(String s) {
-    print("  _updateUrl = " + s);
+  void _initImg() {
+    if (img == null) {
+      img = new ImgBean();
+      img.url = testImgUrl2;
+      img.copyright = testCopyRight2;
+    }
+  }
+
+  void _updateUrl(ImgBean img) {
     setState(() {
-      url = s;
+      this.img = img;
     });
   }
 
@@ -36,7 +44,7 @@ class _HomeRouteState extends State<HomeRoute> {
     if (!getted) {
       print(" get url start");
       var url = await bingApi.getUrlAndSave();
-      _updateUrl("https://www.bing.com" + url);
+      _updateUrl(url);
       getted = true;
     }
   }
@@ -56,7 +64,7 @@ class _HomeRouteState extends State<HomeRoute> {
     var future = getPhoneLocalPath();
     future.then((value) {
       print("value=$value");
-      dio.download(url, value + "/aaaImg/ttt.png");
+      dio.download(img.url, value + "/aaaImg/ttt.png");
     });
   }
 
@@ -95,20 +103,20 @@ class _HomeRouteState extends State<HomeRoute> {
         builder: (BuildContext context) {
           return CupertinoActionSheet(
             actions: <Widget>[
-              CupertinoActionSheetAction(
-                child: Text(
-                  '查看历史图片',
-                  style: TextStyle(
-                    color: Colors.blue[700],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  _takePhoto();
-                },
-                isDefaultAction: true,
-              ),
+              // CupertinoActionSheetAction(
+              //   child: Text(
+              //     '查看历史图片',
+              //     style: TextStyle(
+              //       color: Colors.blue[700],
+              //       fontSize: 20,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              //   onPressed: () {
+              //     _takePhoto();
+              //   },
+              //   isDefaultAction: true,
+              // ),
               CupertinoActionSheetAction(
                 child: Text(
                   '下载图片到本地',
@@ -121,7 +129,7 @@ class _HomeRouteState extends State<HomeRoute> {
                 onPressed: () {
                   Navigator.pop(context);
                   _saveAndUpdateSys(
-                      url, md5.convert(utf8.encode(url)).toString());
+                      img.url, md5.convert(utf8.encode(img.url)).toString());
                 },
                 isDestructiveAction: true,
               ),
@@ -135,7 +143,7 @@ class _HomeRouteState extends State<HomeRoute> {
                   ),
                 ),
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: url));
+                  Clipboard.setData(ClipboardData(text: img.url));
                   _toast("成功复制图片地址");
                   Navigator.pop(context);
                 },
@@ -148,6 +156,7 @@ class _HomeRouteState extends State<HomeRoute> {
 
   @override
   Widget build(BuildContext context) {
+    _initImg();
     _getUrl();
     return Scaffold(
       body: Stack(
@@ -159,7 +168,7 @@ class _HomeRouteState extends State<HomeRoute> {
             child: Container(
               color: Colors.grey[850],
               child: Center(
-                child: Image.network(url),
+                child: Image.network(img.url),
               ),
             ),
           ),
@@ -171,7 +180,7 @@ class _HomeRouteState extends State<HomeRoute> {
               padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
               color: Color(0x66666666),
               child: Text(
-                testCopyRight2,
+                img.copyright,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),

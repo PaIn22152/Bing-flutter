@@ -1,4 +1,5 @@
-import 'package:flutter_demo/const/Constants.dart';
+import 'package:flutter_demo/app/db/beans/img_bean.dart';
+import 'package:flutter_demo/const/constants.dart';
 
 import 'net_manager.dart';
 
@@ -10,10 +11,17 @@ class BingApi {
     if (res != null && res.status) {
       var data = res.data;
       Map<String, dynamic> map = new Map<String, dynamic>.from(data);
-      var map2 = map["images"];
-      var map22 = map2[2];
-      var map222 = map22["url"];
-      return map222;
+      var images = map["images"];
+      ImgBean img;
+      for (dynamic d in images) {
+        if (img == null) {
+          img = ImgBean.create(d);
+        }else{
+          //insert db
+        }
+        print("object");
+      }
+      return img;
     }
     return null;
   }
