@@ -1,12 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
+import 'package:flutter_demo/app/my_router.dart';
+import 'package:flutter_demo/app/routes/setting_route.dart';
 import 'package:flutter_demo/app/utils/Log.dart';
 import 'package:flutter_demo/const/constants.dart';
 import 'package:flutter_demo/net/bing_api.dart';
@@ -21,8 +25,9 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
-  ImgBean img = null;
-  bool getted = false;
+  ImgBean img;
+
+  bool toGet = true;
 
   final BingApi bingApi = new BingApi();
 
@@ -40,12 +45,18 @@ class _HomeRouteState extends State<HomeRoute> {
     });
   }
 
+  void _regetUrl() {
+    setState(() {
+      this.toGet = true;
+    });
+  }
+
   void _getUrl() async {
-    if (!getted) {
-      print(" get url start");
+    if (toGet) {
+      L.d(" get url start");
       var url = await bingApi.getUrlAndSave();
       _updateUrl(url);
-      getted = true;
+      toGet = false;
     }
   }
 
@@ -63,7 +74,7 @@ class _HomeRouteState extends State<HomeRoute> {
     Dio dio = Dio();
     var future = getPhoneLocalPath();
     future.then((value) {
-      print("value=$value");
+      L.d("value=$value");
       dio.download(img.url, value + "/aaaImg/ttt.png");
     });
   }
@@ -74,9 +85,9 @@ class _HomeRouteState extends State<HomeRoute> {
         .get(url, options: Options(responseType: ResponseType.bytes));
     final result = await ImageGallerySaver.saveImage(
         Uint8List.fromList(response.data),
-        quality: 60,
+        quality: 100,
         name: name);
-    print("  _getHttp result=$result");
+    L.d("  _getHttp result=$result");
     _toast("图片保存到：$result");
   }
 
@@ -119,6 +130,24 @@ class _HomeRouteState extends State<HomeRoute> {
               // ),
               CupertinoActionSheetAction(
                 child: Text(
+                  '设置',
+                  style: TextStyle(
+                    color: Colors.blue[700],
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () {
+                  L.e("test e");
+                  L.d("test d");
+                  Navigator.pop(context);
+                  // _regetUrl();
+                  Navigator.of(context).pushNamed(MyRouter.setting);
+                },
+                isDestructiveAction: true,
+              ),
+              CupertinoActionSheetAction(
+                child: Text(
                   '下载图片到本地',
                   style: TextStyle(
                     color: Colors.blue[700],
@@ -154,39 +183,62 @@ class _HomeRouteState extends State<HomeRoute> {
         });
   }
 
+  bool doubleClick = false;
+
+  Future<bool> _exitApp() {
+    if (doubleClick) {
+      return new Future.value(true);
+    } else {
+      doubleClick = true;
+      Future.delayed(Duration(seconds: 2), () {
+        doubleClick = false;
+      });
+      _toast("再按一次退出应用");
+      return new Future.value(false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _initImg();
     _getUrl();
-    return Scaffold(
-      body: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              _showMenu();
-            },
-            child: Container(
-              color: Colors.grey[850],
-              child: Center(
-                child: Image.network(img.url),
+    return WillPopScope(
+      onWillPop: () => _exitApp(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            GestureDetector(
+              onTap: () {
+                _showMenu();
+              },
+              child: Container(
+                color: Colors.grey[850],
+                child: Center(
+                  // child: Image.network(img.url),
+                  child: CachedNetworkImage(
+                    imageUrl: img.url,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              color: Color(0x66666666),
-              child: Text(
-                img.copyright,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, color: Colors.white),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 24, 20, 24),
+                color: Color(0x66666666),
+                child: Text(
+                  img.copyright,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
+import 'package:flutter_demo/app/db/db_manager.dart';
+import 'package:flutter_demo/app/utils/Log.dart';
 import 'package:flutter_demo/const/constants.dart';
 
 import 'net_manager.dart';
@@ -16,8 +18,10 @@ class BingApi {
       for (dynamic d in images) {
         if (img == null) {
           img = ImgBean.create(d);
-        }else{
+        } else {
           //insert db
+          int i = ReadSQL().db.hashCode;
+          L.d(" db i = $i");
         }
         print("object");
       }
