@@ -1,5 +1,7 @@
 import 'package:logger/logger.dart';
 
+///log日志
+
 class L {
   //判断是否是release环境，关闭log
   static const bool release_env = bool.fromEnvironment('dart.vm.product');

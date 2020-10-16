@@ -11,7 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
 import 'package:flutter_demo/app/db/db_manager.dart';
 import 'package:flutter_demo/app/my_router.dart';
-import 'package:flutter_demo/app/utils/Log.dart';
+import 'package:flutter_demo/app/res/strings.dart';
+import 'package:flutter_demo/app/utils/kit.dart';
+import 'package:flutter_demo/app/utils/log.dart';
+import 'package:flutter_demo/app/utils/sp_impl.dart';
+import 'file:///D:/as/work-space/AA-git-projects/Bing-flutter-git/lib/app/res/colors.dart';
 import 'package:flutter_demo/const/constants.dart';
 import 'package:flutter_demo/net/bing_api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -79,44 +83,42 @@ class _HomeRouteState extends State<HomeRoute> {
   }
 
   //保存图片前，先申请存储权限
-  _requestStorePermission() async{
+  _requestStorePermission() async {
     await Permission.storage.request();
-    if(await Permission.storage.isGranted){
+    if (await Permission.storage.isGranted) {
       L.d("权限授权成功！");
-      _saveAndUpdateSys(
-          img.url, md5.convert(utf8.encode(img.url)).toString());
-    }else{
-      _toast("使用此功能需要相应权限！");
+      _saveAndUpdateSys(img.url, md5.convert(utf8.encode(img.url)).toString());
+    } else {
+      toast("使用此功能需要相应权限！");
     }
   }
 
   //保存图片并通知系统更新
   _saveAndUpdateSys(String url, String name) async {
+    var quality = await spGetPicQuality();
     var response = await Dio()
         .get(url, options: Options(responseType: ResponseType.bytes));
     final result = await ImageGallerySaver.saveImage(
         Uint8List.fromList(response.data),
-        quality: 100,
+        quality: quality,
         name: name);
     L.d("  _getHttp result=$result");
-    _toast("图片保存到：$result");
+    toast("图片保存到：$result");
   }
 
-  void _toast(String msg) {
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.blueGrey,
-        textColor: Colors.white,
-        fontSize: 16.0);
-  }
-
-  void _takePhoto() async {
+  void _pickPhoto() async {
     ImagePicker picker = new ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     print("pickedFile.path=${pickedFile.path}");
+  }
+
+  //菜单栏默认字体样式（大小，颜色，是否加粗等）
+  TextStyle _defMenuStyle() {
+    return TextStyle(
+      color: Colors.blue[700],
+      fontSize: 18,
+      // fontWeight: FontWeight.bold,
+    );
   }
 
   void _showMenu() {
@@ -124,33 +126,33 @@ class _HomeRouteState extends State<HomeRoute> {
         context: context,
         builder: (BuildContext context) {
           return CupertinoActionSheet(
+            title: Text(
+              homeMenuTitle,
+              // style: _defMenuStyle(),
+            ),
             actions: <Widget>[
-              // CupertinoActionSheetAction(
-              //   child: Text(
-              //     '查看历史图片',
-              //     style: TextStyle(
-              //       color: Colors.blue[700],
-              //       fontSize: 20,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              //   onPressed: () {
-              //     _takePhoto();
-              //   },
-              //   isDefaultAction: true,
-              // ),
               CupertinoActionSheetAction(
                 child: Text(
-                  '设置',
-                  style: TextStyle(
-                    color: Colors.blue[700],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  homeMenuHistory,
+                  style: _defMenuStyle(),
                 ),
                 onPressed: () {
-                  L.e("test e");
-                  L.d("test d");
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed(MyRouter.history);
+                },
+                // isDefaultAction: true,
+                isDestructiveAction: true,
+              ),
+              CupertinoActionSheetAction(
+                child: Text(
+                  homeMenuSet,
+                  style: _defMenuStyle(),
+                ),
+                onPressed: () {
+                  // spTestPut("sss123");
+                  spTestGet().then((value) => L.d("2 sp=$value"));
+
+                  spGetPicQuality().then((value) => L.d(" sp pic=$value"));
 
                   Navigator.pop(context);
                   // _regetUrl();
@@ -160,32 +162,23 @@ class _HomeRouteState extends State<HomeRoute> {
               ),
               CupertinoActionSheetAction(
                 child: Text(
-                  '下载图片到本地',
-                  style: TextStyle(
-                    color: Colors.blue[700],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  homeMenuDownload,
+                  style: _defMenuStyle(),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
                   _requestStorePermission();
-
                 },
                 isDestructiveAction: true,
               ),
               CupertinoActionSheetAction(
                 child: Text(
-                  '复制图片地址',
-                  style: TextStyle(
-                    color: Colors.blue[700],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  homeMenuCopy,
+                  style: _defMenuStyle(),
                 ),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: img.url));
-                  _toast("成功复制图片地址");
+                  toast("成功复制图片地址");
                   Navigator.pop(context);
                 },
                 isDestructiveAction: true,
@@ -205,7 +198,7 @@ class _HomeRouteState extends State<HomeRoute> {
       Future.delayed(Duration(seconds: 2), () {
         doubleClick = false;
       });
-      _toast("再按一次退出应用");
+      toast("再按一次退出应用");
       return new Future.value(false);
     }
   }

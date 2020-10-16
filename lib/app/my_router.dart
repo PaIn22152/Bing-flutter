@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/app/routes/history_route.dart';
 import 'package:flutter_demo/app/routes/home_route.dart';
 import 'package:flutter_demo/app/routes/setting_route.dart';
-import 'package:flutter_demo/app/utils/router_utils.dart';
+import 'package:flutter_demo/app/utils/router_anim.dart';
 
 class AppAnalysis extends NavigatorObserver {
   @override
@@ -18,6 +19,7 @@ class AppAnalysis extends NavigatorObserver {
 class MyRouter {
   static const String home = 'home';
   static const String setting = 'setting';
+  static const String history = 'history';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -26,6 +28,8 @@ class MyRouter {
         return NoAnimRouter(child: HomeRoute());
       case setting:
         return Right2LeftRouter(child: SettingRoute());
+      case history:
+        return FadeRouter(child: HistoryRoute());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+///路由动画
+
 //缩放路由动画
 class ScaleRouter<T> extends PageRouteBuilder<T> {
   final Widget child;

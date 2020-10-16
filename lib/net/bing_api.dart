@@ -1,6 +1,6 @@
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
 import 'package:flutter_demo/app/db/db_manager.dart';
-import 'package:flutter_demo/app/utils/Log.dart';
+import 'package:flutter_demo/app/utils/log.dart';
 import 'package:flutter_demo/const/constants.dart';
 
 import 'net_manager.dart';
