@@ -9,8 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
+import 'package:flutter_demo/app/db/db_manager.dart';
 import 'package:flutter_demo/app/my_router.dart';
-import 'package:flutter_demo/app/routes/setting_route.dart';
 import 'package:flutter_demo/app/utils/Log.dart';
 import 'package:flutter_demo/const/constants.dart';
 import 'package:flutter_demo/net/bing_api.dart';
@@ -18,6 +18,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeRoute extends StatefulWidget {
   @override
@@ -28,8 +29,6 @@ class _HomeRouteState extends State<HomeRoute> {
   ImgBean img;
 
   bool toGet = true;
-
-  final BingApi bingApi = new BingApi();
 
   void _initImg() {
     if (img == null) {
@@ -54,9 +53,9 @@ class _HomeRouteState extends State<HomeRoute> {
   void _getUrl() async {
     if (toGet) {
       L.d(" get url start");
-      var url = await bingApi.getUrlAndSave();
-      _updateUrl(url);
+      var url = await BingApi.getUrlAndSave();
       toGet = false;
+      _updateUrl(url);
     }
   }
 
@@ -77,6 +76,18 @@ class _HomeRouteState extends State<HomeRoute> {
       L.d("value=$value");
       dio.download(img.url, value + "/aaaImg/ttt.png");
     });
+  }
+
+  //保存图片前，先申请存储权限
+  _requestStorePermission() async{
+    await Permission.storage.request();
+    if(await Permission.storage.isGranted){
+      L.d("权限授权成功！");
+      _saveAndUpdateSys(
+          img.url, md5.convert(utf8.encode(img.url)).toString());
+    }else{
+      _toast("使用此功能需要相应权限！");
+    }
   }
 
   //保存图片并通知系统更新
@@ -140,6 +151,7 @@ class _HomeRouteState extends State<HomeRoute> {
                 onPressed: () {
                   L.e("test e");
                   L.d("test d");
+
                   Navigator.pop(context);
                   // _regetUrl();
                   Navigator.of(context).pushNamed(MyRouter.setting);
@@ -157,8 +169,8 @@ class _HomeRouteState extends State<HomeRoute> {
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  _saveAndUpdateSys(
-                      img.url, md5.convert(utf8.encode(img.url)).toString());
+                  _requestStorePermission();
+
                 },
                 isDestructiveAction: true,
               ),

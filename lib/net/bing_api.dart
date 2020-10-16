@@ -6,7 +6,8 @@ import 'package:flutter_demo/const/constants.dart';
 import 'net_manager.dart';
 
 class BingApi {
-  getUrlAndSave() async {
+  static getUrlAndSave() async {
+    L.d("getUrlAndSave");
     var res = await NetManager.getInstance()
         .baseUrl(bingApiBaseUrl)
         .get(bingApiTailUrl);
@@ -19,11 +20,10 @@ class BingApi {
         if (img == null) {
           img = ImgBean.create(d);
         } else {
-          //insert db
+          //todo insert db
           int i = ReadSQL().db.hashCode;
           L.d(" db i = $i");
         }
-        print("object");
       }
       return img;
     }

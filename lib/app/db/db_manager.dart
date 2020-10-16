@@ -1,22 +1,12 @@
+import 'package:flutter_demo/app/utils/Log.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class ReadSQL{
-  static const String tableShelf = "bookShelf";
-  static const String tableCatalog = "bookCatalog";
+  static const String tableImg = "_img_tab";
 
-  final String dropTableShelf = "DROP TABLE IF EXISTS $tableShelf";
-  final String createTableShelf = "CREATE TABLE $tableShelf (id INTEGER PRIMARY KEY AUTOINCREMENT, bookId TEXT"
-      ",title TEXT,readers REAL,briefIntro TEXT,charactersCount INTEGER"
-      ",chaptersCount INTEGER,cover TEXT,serialState INTEGER"
-      ",majorCateId TEXT,majorCateName TEXT"
-      ",minorCateId TEXT,minorCateName TEXT"
-      ",ratio REAL,author TEXT,lastReadTime INTEGER)";
-
-
-  final String dropTableCatalog = "DROP TABLE IF EXISTS $tableCatalog";
-  final String createTableCatalog = "CREATE TABLE $tableCatalog (id INTEGER PRIMARY KEY AUTOINCREMENT, mixCode TEXT"
-      ",bookId TEXT,chapterTitle TEXT,chapterId INTEGER,status INTEGER)";
+  final String dropTableCatalog = "DROP TABLE IF EXISTS $tableImg";
+  final String createTableCatalog = "CREATE TABLE $tableImg (id INTEGER PRIMARY KEY AUTOINCREMENT, enddate TEXT,url TEXT,copyright TEXT)";
 
   Database _db;
 
@@ -29,7 +19,7 @@ class ReadSQL{
 
   _initDb() async{
     String basePath = await getDatabasesPath();
-    String path = join(basePath,"read.db");
+    String path = join(basePath,"bing.db");
     Database db = await openDatabase(path,version: 2,onCreate: _onCreate,onUpgrade: _onUpgrade);
     return db;
 
@@ -42,10 +32,8 @@ class ReadSQL{
   }
 
   void _onCreate(Database db, int newVersion) async{
-    print("_onCreate newVersion:$newVersion");
+    L.d("_onCreate newVersion:$newVersion");
     var batch = db.batch();
-    batch.execute(dropTableShelf);
-    batch.execute(createTableShelf);
 
     batch.execute(dropTableCatalog);
     batch.execute(createTableCatalog);
@@ -53,8 +41,8 @@ class ReadSQL{
   }
 
   void _onUpgrade(Database db, int oldVersion,int newVersion)async{
-    print("_onUpgrade oldVersion:$oldVersion");
-    print("_onUpgrade newVersion:$newVersion");
+    L.d("_onUpgrade oldVersion:$oldVersion");
+    L.d("_onUpgrade newVersion:$newVersion");
 
     var batch = db.batch();
     if(oldVersion == 1){
