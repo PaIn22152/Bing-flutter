@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -12,6 +13,7 @@ import 'package:flutter_demo/app/db/beans/img_bean.dart';
 import 'package:flutter_demo/app/db/db_manager.dart';
 import 'package:flutter_demo/app/my_router.dart';
 import 'package:flutter_demo/app/res/strings.dart';
+import 'package:flutter_demo/app/routes/history_route.dart';
 import 'package:flutter_demo/app/utils/kit.dart';
 import 'package:flutter_demo/app/utils/log.dart';
 import 'package:flutter_demo/app/utils/sp_impl.dart';
@@ -34,7 +36,7 @@ class _HomeRouteState extends State<HomeRoute> {
 
   bool toGet = true;
 
-  void _initImg() {
+  _initImg() {
     if (img == null) {
       img = new ImgBean();
       img.url = testImgUrl2;
@@ -42,24 +44,24 @@ class _HomeRouteState extends State<HomeRoute> {
     }
   }
 
-  void _updateUrl(ImgBean img) {
+  _updateImg(ImgBean img) {
     setState(() {
       this.img = img;
     });
   }
 
-  void _regetUrl() {
+  _regetUrl() {
     setState(() {
       this.toGet = true;
     });
   }
 
-  void _getUrl() async {
+  _getUrl() async {
     if (toGet) {
       L.d(" get url start");
       var url = await BingApi.getUrlAndSave();
       toGet = false;
-      _updateUrl(url);
+      _updateImg(url);
     }
   }
 
@@ -121,7 +123,7 @@ class _HomeRouteState extends State<HomeRoute> {
     );
   }
 
-  void _showMenu() {
+  _showMenu() {
     showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) {
@@ -136,9 +138,15 @@ class _HomeRouteState extends State<HomeRoute> {
                   homeMenuHistory,
                   style: _defMenuStyle(),
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).pushNamed(MyRouter.history);
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  // var reslut = await Navigator.of(context).pushNamed(MyRouter.history);
+                  // Navigator.of(context).pushNamed(MyRouter.history);
+                  var result=await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return new HistoryRoute();
+                  }));
+                  // L.d("result=$reslut");
+                  _updateImg(result);
                 },
                 // isDefaultAction: true,
                 isDestructiveAction: true,
@@ -195,9 +203,26 @@ class _HomeRouteState extends State<HomeRoute> {
       return new Future.value(true);
     } else {
       doubleClick = true;
-      Future.delayed(Duration(seconds: 2), () {
+
+      //延时
+      Timer(Duration(seconds: 2), () {
         doubleClick = false;
       });
+      //效果同上，而且也是使用timer实现的
+      // Future.delayed(Duration(seconds: 2), () {
+      //   doubleClick = false;
+      // });
+
+      //轮询
+      // var num = 0;
+      // Timer.periodic(Duration(seconds: 1), (timer) {
+      //   L.d("periodic num=$num");
+      //   num++;
+      //   if (num >= 5) {
+      //     timer.cancel();
+      //   }
+      // });
+
       toast("再按一次退出应用");
       return new Future.value(false);
     }

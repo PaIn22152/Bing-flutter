@@ -1,5 +1,8 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
 import 'package:flutter_demo/app/db/db_manager.dart';
+import 'package:flutter_demo/app/db/img_db.dart';
+import 'package:flutter_demo/app/utils/convertor.dart';
 import 'package:flutter_demo/app/utils/log.dart';
 import 'package:flutter_demo/const/constants.dart';
 
@@ -15,16 +18,11 @@ class BingApi {
       var data = res.data;
       Map<String, dynamic> map = new Map<String, dynamic>.from(data);
       var images = map["images"];
-      ImgBean img;
       for (dynamic d in images) {
-        if (img == null) {
-          img = ImgBean.create(d);
-        } else {
-          //todo insert db
-          int i = ReadSQL().db.hashCode;
-          L.d(" db i = $i");
-        }
+        ImgDBHelper.instance.insertImg(ImgBean.createFromJson(d));
       }
+      var img = await ImgDBHelper.instance.getImg(formatDateNow());
+      L.d("img = $img");
       return img;
     }
     return null;

@@ -2,7 +2,7 @@ import 'package:flutter_demo/app/utils/log.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class ReadSQL{
+class DBManager{
   static const String tableImg = "_img_tab";
 
   final String dropTableCatalog = "DROP TABLE IF EXISTS $tableImg";

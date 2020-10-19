@@ -20,6 +20,15 @@ _spGetIntDef(String key, int def) async {
     return res;
 }
 
+_spGetDoubleDef(String key, double def) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  dynamic res = sharedPreferences.get(key);
+  if (res == null) {
+    return def;
+  } else
+    return res;
+}
+
 //put的简单封装
 _spPutString(String key, value) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -29,6 +38,11 @@ _spPutString(String key, value) async {
 _spPutInt(String key, int value) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sharedPreferences.setInt(key, value);
+}
+
+_spPutDouble(String key, double value) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.setDouble(key, value);
 }
 
 //测试
@@ -45,10 +59,10 @@ Future spTestGet() async {
 //下载图片质量
 const String key_pic_quality = 'key_pic_quality';
 
-Future spPutPicQuality(int i) async {
-  _spPutInt(key_pic_quality, i);
+Future spPutPicQuality(double i) async {
+  _spPutDouble(key_pic_quality, i);
 }
 
 Future spGetPicQuality() async {
-  return _spGetIntDef(key_pic_quality, 50);
+  return _spGetDoubleDef(key_pic_quality, 50);
 }
