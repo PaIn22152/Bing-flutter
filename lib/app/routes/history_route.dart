@@ -35,7 +35,6 @@ class _HistoryRouteState extends State<HistoryRoute> {
             return ListTile(
               title: Container(
                   width: 360.w,
-                  color: Colors.red,
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 10.w),
                   child: Stack(
                     children: [
