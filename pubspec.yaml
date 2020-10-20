@@ -27,24 +27,16 @@ dependencies:
   english_words: ^3.1.5
   # 网络请求
   http: '>=0.11.3+12'
-  # 设备信息
-  device_info: '0.4.2+8'
   # 网络请求
   dio: ^3.0.10
   # Toast土司
   fluttertoast: ^7.1.1
-  # 下载
-  download_manager: ^1.0.1+2
   # 权限申请
   permission_handler: ^5.0.1+1
-  # 路径管理
-  path_provider: ^1.6.18
   # 图片保存
   image_gallery_saver: '^1.6.0'
   # MD5
   crypto: ^2.1.5
-  # 图片选择，可以来自相册和相机拍照
-  image_picker: ^0.6.7+11
   # 图片缓存
   cached_network_image: ^2.3.2+1
   # 日志log

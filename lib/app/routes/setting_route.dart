@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/app/res/strings.dart';
 import 'package:flutter_demo/app/utils/screen_adapt.dart';
 import 'package:flutter_demo/app/utils/sp_impl.dart';
 
@@ -17,18 +18,16 @@ class _SettingRouteState extends State<SettingRoute> {
     });
   }
 
-  _label2(int i) {}
-
   _label() {
     String label = "";
     if (quality >= 100) {
-      label = "原图";
+      label = setLabel_1;
     } else if (quality >= 70) {
-      label = "超清";
+      label = setLabel_2;
     } else if (quality >= 45) {
-      label = "高清";
+      label = setLabel_3;
     } else {
-      label = "清晰";
+      label = setLabel_4;
     }
     return label;
   }
@@ -38,7 +37,7 @@ class _SettingRouteState extends State<SettingRoute> {
     spGetPicQuality().then((value) => _updateQuality(value));
     return Scaffold(
       appBar: AppBar(
-        title: Text("设置"),
+        title: Text(setTitle),
       ),
       body: Column(
         children: [
@@ -47,7 +46,7 @@ class _SettingRouteState extends State<SettingRoute> {
               Container(
                 margin: EdgeInsets.fromLTRB(rpx(context, 16), 0, 0, 0),
                 child: Text(
-                  "下载图片质量",
+                  setImgQuality,
                   style: TextStyle(fontSize: rpx(context, 16)),
                 ),
               ),

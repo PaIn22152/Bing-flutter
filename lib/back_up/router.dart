@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:device_info/device_info.dart';
+// import 'package:device_info/device_info.dart';
 
 // void main() => runApp(new MyApp());
 
@@ -29,12 +29,12 @@ class TipRoute extends StatelessWidget {
   final String text;
 
   void _printInfo() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    print('Running on ${androidInfo.model}'); // e.g. "Moto G (4)"
-
-    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    print('Running on ${iosInfo.utsname.machine}');
+    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    // print('Running on ${androidInfo.model}'); // e.g. "Moto G (4)"
+    //
+    // IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    // print('Running on ${iosInfo.utsname.machine}');
   }
 
   @override

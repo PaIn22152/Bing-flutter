@@ -11,7 +11,7 @@ void toast(String msg) {
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       // backgroundColor: Color.fromARGB(180, 180, 180, 180),
-      backgroundColor: toastBgColor,
+      backgroundColor: toastBg,
       // backgroundColor: Colors.blue,
       textColor: Colors.white,
       webPosition: "center",

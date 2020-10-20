@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
 import 'package:flutter_demo/app/db/img_db.dart';
 import 'package:flutter_demo/app/res/colors.dart';
+import 'package:flutter_demo/app/res/strings.dart';
 import 'package:flutter_demo/app/utils/log.dart';
 import 'package:flutter_demo/app/utils/screen_adapt.dart';
 
@@ -26,11 +27,10 @@ class _HistoryRouteState extends State<HistoryRoute> {
     ImgDBHelper.instance.getImgs().then((value) => _updateData(value));
     return Scaffold(
       appBar: AppBar(
-        title: Text("历史图片"),
+        title: Text(historyTitle),
       ),
       body: ListView.builder(
           itemCount: imgs.length,
-          // itemExtent: 50.0, //强制高度为50.0
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: Container(

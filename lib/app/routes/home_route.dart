@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,20 +9,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_demo/app/db/beans/img_bean.dart';
-import 'package:flutter_demo/app/db/db_manager.dart';
 import 'package:flutter_demo/app/my_router.dart';
+import 'package:flutter_demo/app/res/colors.dart';
 import 'package:flutter_demo/app/res/strings.dart';
 import 'package:flutter_demo/app/routes/history_route.dart';
 import 'package:flutter_demo/app/utils/kit.dart';
 import 'package:flutter_demo/app/utils/log.dart';
+import 'package:flutter_demo/app/utils/screen_adapt.dart';
 import 'package:flutter_demo/app/utils/sp_impl.dart';
-import 'file:///D:/as/work-space/AA-git-projects/Bing-flutter-git/lib/app/res/colors.dart';
 import 'package:flutter_demo/const/constants.dart';
 import 'package:flutter_demo/net/bing_api.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class HomeRoute extends StatefulWidget {
@@ -61,29 +57,10 @@ class _HomeRouteState extends State<HomeRoute> {
   _getUrl() async {
     if (toGet) {
       L.d(" get url start");
-      var url = await BingApi.getUrlAndSave();
+      var url = await getImgsFromNet();
       toGet = false;
       _updateImg(url);
     }
-  }
-
-  ///获取手机的存储目录路径
-  ///getExternalStorageDirectory() 获取的是  android 的外部存储 （External Storage）
-  ///  getApplicationDocumentsDirectory 获取的是 ios 的Documents` or `Downloads` 目录
-  Future<String> getPhoneLocalPath() async {
-    final directory = Theme.of(context).platform == TargetPlatform.android
-        ? await getExternalStorageDirectory()
-        : await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  void _downloadImg() async {
-    Dio dio = Dio();
-    var future = getPhoneLocalPath();
-    future.then((value) {
-      L.d("value=$value");
-      dio.download(img.url, value + "/aaaImg/ttt.png");
-    });
   }
 
   //保存图片前，先申请存储权限
@@ -93,7 +70,7 @@ class _HomeRouteState extends State<HomeRoute> {
       L.d("权限授权成功！");
       _saveAndUpdateSys(img.url, md5.convert(utf8.encode(img.url)).toString());
     } else {
-      toast("使用此功能需要相应权限！");
+      toast(toastNeedPermission);
     }
   }
 
@@ -107,13 +84,7 @@ class _HomeRouteState extends State<HomeRoute> {
         quality: quality.toInt(),
         name: name);
     L.d("  _getHttp result=$result");
-    toast("图片保存到：$result");
-  }
-
-  void _pickPhoto() async {
-    ImagePicker picker = new ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    print("pickedFile.path=${pickedFile.path}");
+    toast(toastSavedImg + result);
   }
 
   //菜单栏默认字体样式（大小，颜色，是否加粗等）
@@ -164,11 +135,6 @@ class _HomeRouteState extends State<HomeRoute> {
                   style: _defMenuStyle(),
                 ),
                 onPressed: () {
-                  // spTestPut("sss123");
-                  spTestGet().then((value) => L.d("2 sp=$value"));
-
-                  spGetPicQuality().then((value) => L.d(" sp pic=$value"));
-
                   Navigator.pop(context);
                   // _regetUrl();
                   Navigator.of(context).pushNamed(MyRouter.setting);
@@ -193,7 +159,7 @@ class _HomeRouteState extends State<HomeRoute> {
                 ),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: img.url));
-                  toast("成功复制图片地址");
+                  toast(toastCopiedUrl);
                   Navigator.pop(context);
                 },
                 isDestructiveAction: true,
@@ -230,7 +196,7 @@ class _HomeRouteState extends State<HomeRoute> {
       //   }
       // });
 
-      toast("再按一次退出应用");
+      toast(toastExitApp);
       return new Future.value(false);
     }
   }
@@ -265,12 +231,13 @@ class _HomeRouteState extends State<HomeRoute> {
               left: 0,
               right: 0,
               child: Container(
-                padding: EdgeInsets.fromLTRB(20, 24, 20, 24),
-                color: Color(0x66666666),
+                padding: EdgeInsets.fromLTRB(rpx(context, 20), rpx(context, 24),
+                    rpx(context, 20), rpx(context, 24)),
+                color: homeCopyrightBg,
                 child: Text(
                   img.copyright,
                   textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 15, color: Colors.white),
+                  style: TextStyle(fontSize: rpx(context, 15), color: Colors.white),
                 ),
               ),
             ),

@@ -1,4 +1,3 @@
-const String testImgUrl = "https://flutter.io/images/flutter-logo-sharing.png";
 const String testImgUrl2 =
     "https://www.bing.com/th?id=OHR.FraserRiver_ZH-CN1625992097_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp";
 const String testCopyRight2 =
