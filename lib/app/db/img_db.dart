@@ -34,7 +34,7 @@ class ImgDBHelper {
   Future<List<ImgBean>> getImgs() async {
     var dbClient = await _sql.db;
     List<Map> maps =
-        await dbClient.rawQuery("SELECT * FROM ${DBManager.tableImg}");
+        await dbClient.rawQuery("SELECT * FROM ${DBManager.tableImg} ORDER BY enddate DESC");
     if (maps == null || maps.length == 0) {
       return null;
     }

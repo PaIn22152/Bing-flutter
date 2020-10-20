@@ -45,9 +45,11 @@ class _HomeRouteState extends State<HomeRoute> {
   }
 
   _updateImg(ImgBean img) {
-    setState(() {
-      this.img = img;
-    });
+    if (img != null) {
+      setState(() {
+        this.img = img;
+      });
+    }
   }
 
   _regetUrl() {
@@ -97,12 +99,12 @@ class _HomeRouteState extends State<HomeRoute> {
 
   //保存图片并通知系统更新
   _saveAndUpdateSys(String url, String name) async {
-    var quality = await spGetPicQuality();
+    double quality = await spGetPicQuality();
     var response = await Dio()
         .get(url, options: Options(responseType: ResponseType.bytes));
     final result = await ImageGallerySaver.saveImage(
         Uint8List.fromList(response.data),
-        quality: quality,
+        quality: quality.toInt(),
         name: name);
     L.d("  _getHttp result=$result");
     toast("图片保存到：$result");
@@ -141,11 +143,16 @@ class _HomeRouteState extends State<HomeRoute> {
                 onPressed: () async {
                   Navigator.of(context).pop();
                   // var reslut = await Navigator.of(context).pushNamed(MyRouter.history);
-                  // Navigator.of(context).pushNamed(MyRouter.history);
-                  var result=await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  // L.d("result=$reslut");
+                  // Navigator.of(context)
+                  //     .pushNamed(MyRouter.history)
+                  //     .then((value) => {
+                  //       L.d("value=$value")}
+                  //       );
+                  var result = await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
                     return new HistoryRoute();
                   }));
-                  // L.d("result=$reslut");
                   _updateImg(result);
                 },
                 // isDefaultAction: true,

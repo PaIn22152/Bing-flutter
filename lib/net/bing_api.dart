@@ -21,7 +21,9 @@ class BingApi {
       for (dynamic d in images) {
         ImgDBHelper.instance.insertImg(ImgBean.createFromJson(d));
       }
-      var img = await ImgDBHelper.instance.getImg(formatDateNow());
+      var date = formatDateNow();
+      L.d("date = $date");
+      var img = await ImgDBHelper.instance.getImg(date);
       L.d("img = $img");
       return img;
     }
