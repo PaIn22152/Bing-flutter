@@ -15,10 +15,10 @@ import 'package:flutter_demo/app/res/strings.dart';
 import 'package:flutter_demo/app/routes/history_route.dart';
 import 'package:flutter_demo/app/utils/kit.dart';
 import 'package:flutter_demo/app/utils/log.dart';
-import 'package:flutter_demo/app/utils/screen_adapt.dart';
 import 'package:flutter_demo/app/utils/sp_impl.dart';
 import 'package:flutter_demo/const/constants.dart';
 import 'package:flutter_demo/net/bing_api.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -205,6 +205,11 @@ class _HomeRouteState extends State<HomeRoute> {
   Widget build(BuildContext context) {
     _initImg();
     _getUrl();
+
+    //设置适配尺寸 (填入设计稿中设备的屏幕尺寸)
+    ScreenUtil.init(context,
+        designSize: Size(360, 640), allowFontScaling: true);
+
     return WillPopScope(
       onWillPop: () => _exitApp(),
       child: Scaffold(
@@ -231,13 +236,12 @@ class _HomeRouteState extends State<HomeRoute> {
               left: 0,
               right: 0,
               child: Container(
-                padding: EdgeInsets.fromLTRB(rpx(context, 20), rpx(context, 24),
-                    rpx(context, 20), rpx(context, 24)),
+                padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
                 color: homeCopyrightBg,
                 child: Text(
                   img.copyright,
                   textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: rpx(context, 15), color: Colors.white),
+                  style: TextStyle(fontSize: 15.sp, color: Colors.white),
                 ),
               ),
             ),

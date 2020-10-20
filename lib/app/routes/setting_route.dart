@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/app/res/strings.dart';
-import 'package:flutter_demo/app/utils/screen_adapt.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_demo/app/utils/sp_impl.dart';
 
 class SettingRoute extends StatefulWidget {
@@ -44,10 +44,10 @@ class _SettingRouteState extends State<SettingRoute> {
           Row(
             children: [
               Container(
-                margin: EdgeInsets.fromLTRB(rpx(context, 16), 0, 0, 0),
+                margin: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
                 child: Text(
                   setImgQuality,
-                  style: TextStyle(fontSize: rpx(context, 16)),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
               ),
               Container(

@@ -15,6 +15,6 @@ double _st(BuildContext context) {
 }
 
 //按屏幕宽适配，分为360份
-double rpx(BuildContext context, double val) {
+double _rpx(BuildContext context, double val) {
   return _sw(context) / 360 * val;
 }

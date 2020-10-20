@@ -6,7 +6,7 @@ import 'package:flutter_demo/app/db/img_db.dart';
 import 'package:flutter_demo/app/res/colors.dart';
 import 'package:flutter_demo/app/res/strings.dart';
 import 'package:flutter_demo/app/utils/log.dart';
-import 'package:flutter_demo/app/utils/screen_adapt.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HistoryRoute extends StatefulWidget {
   @override
@@ -34,7 +34,9 @@ class _HistoryRouteState extends State<HistoryRoute> {
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, rpx(context, 10)),
+                  width: 360.w,
+                  color: Colors.red,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10.w),
                   child: Stack(
                     children: [
                       Positioned(
@@ -52,8 +54,8 @@ class _HistoryRouteState extends State<HistoryRoute> {
                       Stack(
                         children: [
                           Container(
-                            width: rpx(context, 360),
-                            height: rpx(context, 40),
+                            width: 360.w,
+                            height: 40.w,
                             color: historyDateBg,
                           ),
                           Center(
@@ -61,7 +63,7 @@ class _HistoryRouteState extends State<HistoryRoute> {
                               imgs[index].enddate,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: rpx(context, 15)),
+                                  fontSize: 15.sp),
                             ),
                           )
                         ],
@@ -71,8 +73,6 @@ class _HistoryRouteState extends State<HistoryRoute> {
               onTap: () {
                 L.d("onTap");
                 Navigator.pop(context, imgs[index]);
-                // Navigator.of(context).pop("testrrrr");
-                // Navigator.of(context).pop();
               },
             );
           }),
