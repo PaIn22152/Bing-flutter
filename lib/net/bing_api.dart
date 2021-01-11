@@ -17,9 +17,12 @@ getImgsFromNet() async {
     var data = res.data;
     Map<String, dynamic> map = new Map<String, dynamic>.from(data);
     var images = map[imgs_key];
-    for (dynamic d in images) {
-      ImgDBHelper.instance.insertImg(ImgBean.createFromJson(d));
-    }
+    await Future.forEach(images, (d) async {
+      ImgBean b = ImgBean.createFromJson(d);
+      await ImgDBHelper.instance.insertImg(b);
+      L.d("getUrlAndSave   instance  bean=$b");
+    });
+
     var date = formatDateNow();
     L.d("date = $date");
     var img = await ImgDBHelper.instance.getImg(date);

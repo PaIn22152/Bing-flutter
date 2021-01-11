@@ -29,19 +29,19 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
-  ImgBean img;
+  ImgBean _img;
 
   bool toGet = true;
 
   _initImg() {
     // ??= 赋值运算符，当变量的值为null时，执行赋值语句，否则不赋值
-    img ??= ImgBean(formatDateNow(), testImgUrl2, testCopyRight2);
+    // _img ??= ImgBean(formatDateNow(), testImgUrl2, testCopyRight2);
   }
 
   _updateImg(ImgBean img) {
     if (img != null) {
       setState(() {
-        this.img = img;
+        this._img = img;
       });
     }
   }
@@ -53,12 +53,18 @@ class _HomeRouteState extends State<HomeRoute> {
   }
 
   _getUrl() async {
+    L.d(" get url start  11");
     if (toGet) {
-
+      toGet = false;
       L.d(" get url start");
       var url = await getImgsFromNet();
-      toGet = false;
-      _updateImg(url);
+      if (url != null) {
+        L.d(" get url 111");
+        _updateImg(url);
+      } else {
+        L.d(" get url 2222");
+        _updateImg(ImgBean(formatDateNow(), testImgUrl2, testCopyRight2));
+      }
     }
   }
 
@@ -67,7 +73,8 @@ class _HomeRouteState extends State<HomeRoute> {
     await Permission.storage.request();
     if (await Permission.storage.isGranted) {
       L.d("权限授权成功！");
-      _saveAndUpdateSys(img.url, md5.convert(utf8.encode(img.url)).toString());
+      _saveAndUpdateSys(
+          _img.url, md5.convert(utf8.encode(_img.url)).toString());
     } else {
       toast(toastNeedPermission);
     }
@@ -157,9 +164,11 @@ class _HomeRouteState extends State<HomeRoute> {
                   style: _defMenuStyle(),
                 ),
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: img.url));
-                  toast(toastCopiedUrl);
-                  Navigator.pop(context);
+                  if (_img != null) {
+                    Clipboard.setData(ClipboardData(text: _img.url));
+                    toast(toastCopiedUrl);
+                    Navigator.pop(context);
+                  }
                 },
                 isDestructiveAction: true,
               ),
@@ -219,43 +228,49 @@ class _HomeRouteState extends State<HomeRoute> {
     ScreenUtil.init(context,
         designSize: Size(360, 640), allowFontScaling: true);
 
+    Widget body;
+    if (_img != null) {
+      body = Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              _showMenu();
+            },
+            child: Container(
+              color: Colors.grey[850],
+              child: Center(
+                // child: Image.network(img.url),
+                child: CachedNetworkImage(
+                  imageUrl: _img.url,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
+              color: homeCopyrightBg,
+              child: Text(
+                _img.copyright,
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 15.sp, color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      body = Container();
+    }
     return WillPopScope(
       onWillPop: () => _exitApp(),
       child: Scaffold(
-        body: Stack(
-          children: [
-            GestureDetector(
-              onTap: () {
-                _showMenu();
-              },
-              child: Container(
-                color: Colors.grey[850],
-                child: Center(
-                  // child: Image.network(img.url),
-                  child: CachedNetworkImage(
-                    imageUrl: img.url,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
-                color: homeCopyrightBg,
-                child: Text(
-                  img.copyright,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 15.sp, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
+        body: body,
       ),
     );
   }

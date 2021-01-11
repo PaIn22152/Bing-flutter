@@ -36,4 +36,9 @@ class ImgBean {
     bean.copyright = json[copyright_key];
     return bean;
   }
+
+  @override
+  String toString() {
+    return 'ImgBean{enddate: $enddate, url: $url, copyright: $copyright}';
+  }
 }
