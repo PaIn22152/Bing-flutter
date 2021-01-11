@@ -10,17 +10,21 @@ class L {
     printer: PrettyPrinter(),
   );
 
-  static d(String string) {
-    // if (release_env) {
-    //   return;
-    // }
-    logger.d(string);
+  // static d(String string) {
+  //   // if (release_env) {
+  //   //   return;
+  //   // }
+  //   logger.d(string);
+  // }
+
+  static d(dynamic d) {
+    logger.d(d);
   }
 
-  static e(String string) {
+  static e(dynamic e) {
     // if (release_env) {
     //   return;
     // }
-    logger.e(string);
+    logger.e(e);
   }
 }

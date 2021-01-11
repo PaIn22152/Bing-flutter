@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_demo/net/rep_result.dart';
-import 'package:flutter_demo/net/response_interceptor.dart';
+import 'package:bing_flutter/net/rep_result.dart';
+import 'package:bing_flutter/net/response_interceptor.dart';
 
 import 'code.dart';
 const String weatherBaseUrl = "https://api.caiyunapp.com/v2.5/sas9gfwyRX2NVehl/";

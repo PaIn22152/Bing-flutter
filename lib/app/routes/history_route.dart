@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/app/db/beans/img_bean.dart';
-import 'package:flutter_demo/app/db/img_db.dart';
-import 'package:flutter_demo/app/res/colors.dart';
-import 'package:flutter_demo/app/res/strings.dart';
-import 'package:flutter_demo/app/utils/log.dart';
+import 'package:bing_flutter/app/db/beans/img_bean.dart';
+import 'package:bing_flutter/app/db/img_db.dart';
+import 'package:bing_flutter/app/res/colors.dart';
+import 'package:bing_flutter/app/res/strings.dart';
+import 'package:bing_flutter/app/utils/log.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HistoryRoute extends StatefulWidget {

@@ -1,8 +1,8 @@
-import 'package:flutter_demo/app/db/beans/img_bean.dart';
-import 'package:flutter_demo/app/db/img_db.dart';
-import 'package:flutter_demo/app/utils/convertor.dart';
-import 'package:flutter_demo/app/utils/log.dart';
-import 'package:flutter_demo/const/constants.dart';
+import 'package:bing_flutter/app/db/beans/img_bean.dart';
+import 'package:bing_flutter/app/db/img_db.dart';
+import 'package:bing_flutter/app/utils/convertor.dart';
+import 'package:bing_flutter/app/utils/log.dart';
+import 'package:bing_flutter/const/constants.dart';
 
 import 'net_manager.dart';
 

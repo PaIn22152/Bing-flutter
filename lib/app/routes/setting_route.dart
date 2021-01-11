@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/app/res/strings.dart';
+import 'package:bing_flutter/app/res/strings.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_demo/app/utils/sp_impl.dart';
+import 'package:bing_flutter/app/utils/sp_impl.dart';
 
 class SettingRoute extends StatefulWidget {
   @override

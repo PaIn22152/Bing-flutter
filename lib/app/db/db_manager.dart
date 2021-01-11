@@ -1,4 +1,4 @@
-import 'package:flutter_demo/app/utils/log.dart';
+import 'package:bing_flutter/app/utils/log.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

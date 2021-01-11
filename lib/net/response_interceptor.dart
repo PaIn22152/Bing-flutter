@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_demo/net/rep_result.dart';
+import 'package:bing_flutter/net/rep_result.dart';
 
 import 'code.dart';
 

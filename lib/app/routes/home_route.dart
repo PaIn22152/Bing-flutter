@@ -8,16 +8,17 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_demo/app/db/beans/img_bean.dart';
-import 'package:flutter_demo/app/my_router.dart';
-import 'package:flutter_demo/app/res/colors.dart';
-import 'package:flutter_demo/app/res/strings.dart';
-import 'package:flutter_demo/app/routes/history_route.dart';
-import 'package:flutter_demo/app/utils/kit.dart';
-import 'package:flutter_demo/app/utils/log.dart';
-import 'package:flutter_demo/app/utils/sp_impl.dart';
-import 'package:flutter_demo/const/constants.dart';
-import 'package:flutter_demo/net/bing_api.dart';
+import 'package:bing_flutter/app/db/beans/img_bean.dart';
+import 'package:bing_flutter/app/my_router.dart';
+import 'package:bing_flutter/app/res/colors.dart';
+import 'package:bing_flutter/app/res/strings.dart';
+import 'package:bing_flutter/app/routes/history_route.dart';
+import 'package:bing_flutter/app/utils/convertor.dart';
+import 'package:bing_flutter/app/utils/kit.dart';
+import 'package:bing_flutter/app/utils/log.dart';
+import 'package:bing_flutter/app/utils/sp_impl.dart';
+import 'package:bing_flutter/const/constants.dart';
+import 'package:bing_flutter/net/bing_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -33,11 +34,8 @@ class _HomeRouteState extends State<HomeRoute> {
   bool toGet = true;
 
   _initImg() {
-    if (img == null) {
-      img = new ImgBean();
-      img.url = testImgUrl2;
-      img.copyright = testCopyRight2;
-    }
+    // ??= 赋值运算符，当变量的值为null时，执行赋值语句，否则不赋值
+    img ??= ImgBean(formatDateNow(), testImgUrl2, testCopyRight2);
   }
 
   _updateImg(ImgBean img) {
@@ -56,6 +54,7 @@ class _HomeRouteState extends State<HomeRoute> {
 
   _getUrl() async {
     if (toGet) {
+
       L.d(" get url start");
       var url = await getImgsFromNet();
       toGet = false;
@@ -91,7 +90,7 @@ class _HomeRouteState extends State<HomeRoute> {
   TextStyle _defMenuStyle() {
     return TextStyle(
       color: Colors.blue[700],
-      fontSize: 18,
+      fontSize: 18.sp,
       // fontWeight: FontWeight.bold,
     );
   }
@@ -161,6 +160,16 @@ class _HomeRouteState extends State<HomeRoute> {
                   Clipboard.setData(ClipboardData(text: img.url));
                   toast(toastCopiedUrl);
                   Navigator.pop(context);
+                },
+                isDestructiveAction: true,
+              ),
+              CupertinoActionSheetAction(
+                child: Text(
+                  '测试功能',
+                  style: _defMenuStyle(),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(MyRouter.test);
                 },
                 isDestructiveAction: true,
               ),

@@ -1,6 +1,6 @@
-import 'package:flutter_demo/app/db/beans/img_bean.dart';
-import 'package:flutter_demo/app/db/db_manager.dart';
-import 'package:flutter_demo/app/utils/log.dart';
+import 'package:bing_flutter/app/db/beans/img_bean.dart';
+import 'package:bing_flutter/app/db/db_manager.dart';
+import 'package:bing_flutter/app/utils/log.dart';
 
 class ImgDBHelper {
   ///数据库操作语句

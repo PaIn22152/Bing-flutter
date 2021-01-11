@@ -1,4 +1,4 @@
-name: flutter_demo
+name: bing_flutter
 description: A new Flutter application.
 
 # The following defines the version and build number for your application.
@@ -11,10 +11,10 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.0.2+13
+version: 2.0.4+14
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -49,6 +49,8 @@ dependencies:
   date_format: ^1.0.9
   # 屏幕适配
   flutter_screenutil: ^3.1.0
+  # 视频播放，ijkplayer 的 Flutter 封装
+  fijkplayer: ^0.8.7
 
 dev_dependencies:
   flutter_test:
