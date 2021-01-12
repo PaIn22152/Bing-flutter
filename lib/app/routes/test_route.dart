@@ -1,8 +1,7 @@
 import 'package:date_format/date_format.dart';
-import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bing_flutter/app/utils/log.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 ///测试用路由，会在此写一些测试用代码
 
@@ -11,94 +10,135 @@ class TestRoute extends StatefulWidget {
   _TestRouteState createState() => _TestRouteState();
 }
 
-class _TestRouteState extends State<TestRoute> {
-  final FijkPlayer player = FijkPlayer();
-
+class MyBlocObserver extends BlocObserver {
   @override
-  void initState() {
-    super.initState();
-    player.setDataSource(
-        "https://sample-videos.com/video123/flv/240/big_buck_bunny_240p_10mb.flv",
-        autoPlay: true);
+  void onEvent(Bloc bloc, Object event) {
+    print('MyBlocObserver bloc = $bloc ; event = $event');
+    super.onEvent(bloc, event);
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    player.release();
+  void onTransition(Bloc bloc, Transition transition) {
+    print('MyBlocObserver bloc = $bloc ; transition = $transition');
+    super.onTransition(bloc, transition);
   }
 
-  f(int o, {bool b = false, int i}) {
-    L.d('b=$b  o=$o');
-    if (b) {
-      L.d('i=$i');
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print('MyBlocObserver cubit = $cubit ; change = $change');
+    super.onChange(cubit, change);
+  }
+
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    print(
+        'MyBlocObserver onError  cubit=$cubit  error=$error  stackTrace=$stackTrace');
+    super.onError(cubit, error, stackTrace);
+  }
+}
+
+enum CounterEvent { increment, reduce }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(10);
+
+  @override
+  void onEvent(CounterEvent event) {
+    print('CounterBloc  event = $event');
+    super.onEvent(event);
+  }
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print('CounterBloc  transition = $transition');
+    super.onTransition(transition);
+  }
+
+  @override
+  void onChange(Change<int> change) {
+    print('CounterBloc  change = $change');
+    super.onChange(change);
+  }
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+      case CounterEvent.reduce:
+        yield state - 1;
+        break;
     }
   }
+}
 
-  add(double a, double b, [double discount = 1.0, double d = 0]) {
-    L.d('add=${(a + b) * discount}');
+class _TestRouteState extends State<TestRoute> {
+  Future<void> _increment() async {
+    bloc.add(CounterEvent.increment);
   }
 
-  double add2(double a, double b, rr, r2) {
-    return rr(a) + r2(b);
+  Future<void> _reduce() async {
+    bloc.add(CounterEvent.reduce);
   }
 
-  assertF() async {
-    assert(1 > 0);//true
-    L.d("assert1");
-    assert(1 > 2);//false
-    L.d("assert2");
+  Widget _blocBuilder() {
+    return BlocBuilder<CounterBloc, int>(
+      cubit: bloc,
+      buildWhen: (previousState, state) {
+        return state % 2 == 0;
+      },
+      builder: (context, state) {
+        return Container(
+          child: Text('_blocBuilder  state=$state'),
+        );
+      },
+    );
   }
+
+  Widget _blocConsumer() {
+    return BlocConsumer(
+        cubit: bloc,
+        builder: (c, s) {
+          return Text('_blocConsumer  state=$s');
+        },
+        listener: (c, s) {});
+  }
+
+  CounterBloc bloc = CounterBloc();
 
   @override
   Widget build(BuildContext context) {
-    String ss = "aab";
-    L.d(ss.codeUnits);
-
-    // var evil = '\u{1f47f}';
-    // var evil = '👿';
-    // L.d(evil); //👿
-    // L.d(evil.codeUnits); //👿
-    //
-    // var i;
-    // L.d(i);
-    // i ??= 10;
-    // L.d(i);
-    // i ??= 33;
-    // L.d(i);
-    // i = '33';
-    // L.d(i);
-    //
-    // f(0);
-    // f(0, b: true);
-    // f(0, b: false, i: 123);
-    // f(0, b: true, i: 345);
-    //
-    // add(2, 3);
-    // add(2, 3, 4);
-
-    var fun = (i) => i * i;
-    var fun2 = (double i) {
-      return i * i * i;
-    };
-    L.d("add2=${add2(1, 2, fun, fun2)}");
-
-    assertF();
-
-    Size s=Size(1, 1);
-    s.isEmpty;
-
-
+    Bloc.observer = MyBlocObserver();
+    // bloc.listen(print);
+    bloc.listen((s) {
+      setState(() {});
+    });
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text('widget.title 👿'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: FijkView(player: player),
+      body: Column(
+        children: [
+          Center(
+            child: Text('cubit=${bloc.state}'),
+          ),
+          RaisedButton(
+            onPressed: () {
+              _increment();
+            },
+            child: Text('add 1'),
+          ),
+          RaisedButton(
+            onPressed: () {
+              _reduce();
+            },
+            child: Text('reduce 1'),
+          ),
+          _blocBuilder(),
+          _blocConsumer(),
+          // _blocListener(),
+        ],
       ),
     );
   }

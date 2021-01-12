@@ -51,6 +51,8 @@ dependencies:
   flutter_screenutil: ^3.2.0
   # 视频播放，ijkplayer 的 Flutter 封装
   fijkplayer: ^0.8.7
+  # 状态管理
+  flutter_bloc: ^6.1.1
 
 dev_dependencies:
   flutter_test:
