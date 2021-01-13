@@ -1,11 +1,12 @@
+import 'package:bing_flutter/my_all_imports.dart';
 import 'package:dio/dio.dart';
-import 'package:bing_flutter/net/rep_result.dart';
-import 'package:bing_flutter/net/response_interceptor.dart';
 
-import 'code.dart';
-const String weatherBaseUrl = "https://api.caiyunapp.com/v2.5/sas9gfwyRX2NVehl/";
-const String cityBaseUrl = "https://restapi.amap.com/v3/config/district?subdistrict=1&key=请使用自己的key&keywords=";
-const String geoBaseUrl = "https://restapi.amap.com/v3/geocode/regeo?key=请使用自己的key&location=";
+const String weatherBaseUrl =
+    "https://api.caiyunapp.com/v2.5/sas9gfwyRX2NVehl/";
+const String cityBaseUrl =
+    "https://restapi.amap.com/v3/config/district?subdistrict=1&key=请使用自己的key&keywords=";
+const String geoBaseUrl =
+    "https://restapi.amap.com/v3/geocode/regeo?key=请使用自己的key&location=";
 const String otaBaseUrl = "http://xiaweizi.online/config/ota/";
 const int _kReceiveTimeout = 15000;
 const int _kSendTimeout = 15000;
@@ -13,7 +14,6 @@ const int _kConnectTimeout = 15000;
 
 ///http请求
 class NetManager {
-
   static NetManager _instance = NetManager._internal();
 
   Dio _dio;
@@ -36,7 +36,7 @@ class NetManager {
     return _instance;
   }
 
-  baseUrl(String baseUrl) {
+  NetManager baseUrl(String baseUrl) {
     _dio.options.baseUrl = baseUrl;
     return _instance;
   }
@@ -71,6 +71,4 @@ class NetManager {
         false,
         errorResponse.statusCode);
   }
-
-
 }

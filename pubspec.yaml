@@ -48,7 +48,7 @@ dependencies:
   # 时间格式化
   date_format: ^1.0.9
   # 屏幕适配
-  flutter_screenutil: ^3.2.0
+  flutter_screenutil: ^4.0.2+3
   # 视频播放，ijkplayer 的 Flutter 封装
   fijkplayer: ^0.8.7
   # 状态管理

@@ -1,6 +1,6 @@
 
 class RepResult {
-  var data;
+  dynamic data;
   bool status;
   int code;
   String msg;

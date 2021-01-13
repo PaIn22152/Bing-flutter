@@ -1,7 +1,5 @@
+import 'package:bing_flutter/my_all_imports.dart';
 import 'package:dio/dio.dart';
-import 'package:bing_flutter/net/rep_result.dart';
-
-import 'code.dart';
 
 /// create by 张风捷特烈 on 2020/4/28
 /// contact me by email 1981462002@qq.com
@@ -20,8 +18,8 @@ class ResponseInterceptors extends InterceptorsWrapper {
         value = new RepResult(response.data, true, Code.SUCCESS);
       }
     } catch (e) {
-
-      value = new RepResult(response.data, false, response.statusCode,msg: e.toString());
+      value = new RepResult(response.data, false, response.statusCode,
+          msg: e.toString());
     }
     return value;
   }
