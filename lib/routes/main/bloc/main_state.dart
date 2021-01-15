@@ -1,15 +1,26 @@
 part of 'main_bloc.dart';
 
-@immutable
-abstract class MainState {}
+abstract class MainState {
+  final ImgBean imgBean;
 
-class MainInitial extends MainState {}
+  const MainState(this.imgBean);
+}
+
+class MainInitial extends MainState {
+  const MainInitial() : super(null);
+}
 
 ///正在获取图片地址
-class ImgGetInProgress extends MainState {}
+class ImgGetInProgress extends MainState {
+  const ImgGetInProgress() : super(null);
+}
 
 ///获取图片地址成功
-class ImgGetSuccess extends MainState {}
+class ImgGetSuccess extends MainState {
+  const ImgGetSuccess(ImgBean imgBean) : super(imgBean);
+}
 
 ///获取图片地址失败
-class ImgGetFailure extends MainState {}
+class ImgGetFailure extends MainState {
+  const ImgGetFailure(ImgBean imgBean) : super(imgBean);
+}

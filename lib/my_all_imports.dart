@@ -7,7 +7,7 @@ library my_all_imports;
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ///第三方库  end
-export 'app.dart';
+export 'base/base_state.dart';
 export 'db/beans/img_bean.dart';
 export 'db/db_manager.dart';
 export 'db/img_db.dart';

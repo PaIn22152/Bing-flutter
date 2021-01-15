@@ -42,19 +42,19 @@ class _HomeRouteState extends State<HomeRoute> {
   }
 
   _getUrl() async {
-    logD(" get url start  11");
-    if (toGet) {
-      toGet = false;
-      logD(" get url start");
-      var url = await getImgsFromNet();
-      if (url != null) {
-        logD(" get url 111");
-        _updateImg(url);
-      } else {
-        logD(" get url 2222");
-        _updateImg(ImgBean(formatDateNow(), testImgUrl2, testCopyRight2));
-      }
-    }
+    // logD(" get url start  11");
+    // if (toGet) {
+    //   toGet = false;
+    //   logD(" get url start");
+    //   var url = await getImgsFromNet();
+    //   if (url != null) {
+    //     logD(" get url 111");
+    //     _updateImg(url);
+    //   } else {
+    //     logD(" get url 2222");
+    //     _updateImg(ImgBean(formatDateNow(), testImgUrl2, testCopyRight2));
+    //   }
+    // }
   }
 
   //保存图片前，先申请存储权限
