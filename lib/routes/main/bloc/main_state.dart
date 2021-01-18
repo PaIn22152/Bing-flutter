@@ -22,5 +22,10 @@ class ImgGetSuccess extends MainState {
 
 ///获取图片地址失败
 class ImgGetFailure extends MainState {
-  const ImgGetFailure(ImgBean imgBean) : super(imgBean);
+  const ImgGetFailure() : super(null);
+}
+
+///图片改变
+class ImgChanged extends MainState {
+  const ImgChanged(ImgBean imgBean) : super(imgBean);
 }

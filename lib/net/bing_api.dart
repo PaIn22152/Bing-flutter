@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 
 const String imgs_key = 'images';
 
-Future<List<ImgBean>> getImgs() async {
+Future<List<ImgBean>> apiGetImgs() async {
   logD('getImgs start ');
   try {
     final Response response = await Dio().post(bingApiUrl);

@@ -25,6 +25,7 @@ class _HistoryRouteState extends State<HistoryRoute> {
         title: Text(historyTitle),
       ),
       body: ListView.builder(
+          // physics: ClampingScrollPhysics(),
           itemCount: imgs.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(

@@ -57,5 +57,5 @@ Future<bool> spPutPicQuality(double i) {
 }
 
 double spGetPicQuality() {
-  return _spGetDef(key_pic_quality, 50) as double;
+  return _spGetDef(key_pic_quality, 50.toDouble()) as double;
 }

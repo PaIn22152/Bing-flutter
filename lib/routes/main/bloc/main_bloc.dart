@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'main_event.dart';
-
 part 'main_state.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
@@ -17,17 +16,21 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   ) async* {
     if (event is MainStarted) {
       yield const ImgGetInProgress();
-      final List<ImgBean> imgBean = await getImgs();
-      await Future.forEach(imgBean, (b) async {
-        await ImgDBHelper.instance.insertImg(b);
-      });
+      final List<ImgBean> imgBean = await apiGetImgs();
+      if (imgBean != null) {
+        await Future.forEach(imgBean, (b) async {
+          await ImgDBHelper.instance.insertImg(b);
+        });
+      }
 
-      // if (imgBean != null) {
-      //   yield ImgGetSuccess(imgBean);
-      // } else {
-      //   yield ImgGetFailure(
-      //       ImgBean(formatDateNow(), testImgUrl2, testCopyRight2));
-      // }
+      final ImgBean img = await ImgDBHelper.instance.getImg(myFormatDate());
+      if (img != null) {
+        yield ImgGetSuccess(img);
+      } else {
+        yield const ImgGetFailure();
+      }
+    } else if (event is MainChanged) {
+      yield ImgChanged(event.newImg);
     }
   }
 }

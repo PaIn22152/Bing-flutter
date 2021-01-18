@@ -188,21 +188,6 @@ class _HomeRouteState extends State<HomeRoute> {
       Timer(Duration(seconds: 2), () {
         doubleClick = false;
       });
-      //效果同上，而且也是使用timer实现的
-      // Future.delayed(Duration(seconds: 2), () {
-      //   doubleClick = false;
-      // });
-
-      //轮询
-      // var num = 0;
-      // Timer.periodic(Duration(seconds: 1), (timer) {
-      //   logD("periodic num=$num");
-      //   num++;
-      //   if (num >= 5) {
-      //     timer.cancel();
-      //   }
-      // });
-
       toast(toastExitApp);
       return new Future.value(false);
     }

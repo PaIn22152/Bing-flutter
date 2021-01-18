@@ -34,29 +34,26 @@ class ImgDBHelper {
   }
 
   Future<List<ImgBean>> getImgs() async {
-    // final dbClient = await _sql.db;
-    // final List<Map<String, dynamic>> maps =
-    //     await dbClient.rawQuery(sql_select_all_img_date_desc());
-    // if (maps == null || maps.isEmpty) {
-    //   return null;
-    // }
-    // final List<ImgBean> list = [];
-    // maps.forEach((it) {
-    //   list.add(ImgBean.createFromMap(it));
-    // });
-
-    return null;
+    final dbClient = await _sql.db;
+    final List<Map> hasList = await dbClient.query(DBManager.tableImg);
+    if (hasList == null || hasList.isEmpty) {
+      return null;
+    }
+    final List<ImgBean> res = <ImgBean>[];
+    hasList.forEach((v) {
+      res.add(ImgBean.fromJson(v));
+    });
+    return Future.value(res);
   }
 
   //date like "20201012"
   Future<ImgBean> getImg(String date) async {
-    // final dbClient = await _sql.db;
-    // final List<Map<String, dynamic>> maps =
-    //     await dbClient.rawQuery(sql_select_by_date(date));
-    // if (maps == null || maps.isEmpty) {
-    //   return null;
-    // }
-    // return ImgBean.createFromMap(maps[0]);
-    return null;
+    final dbClient = await _sql.db;
+    final List<Map> hasList = await dbClient.query(DBManager.tableImg,
+        where: '${DBManager.date} = ?', whereArgs: [date]);
+    if (hasList == null || hasList.isEmpty) {
+      return null;
+    }
+    return Future.value(ImgBean.fromJson(hasList[0]));
   }
 }
