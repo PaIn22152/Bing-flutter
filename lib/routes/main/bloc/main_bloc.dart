@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'main_event.dart';
+
 part 'main_state.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
@@ -16,14 +17,16 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   ) async* {
     if (event is MainStarted) {
       yield const ImgGetInProgress();
-      final List<ImgBean> imgBean = await apiGetImgs();
-      if (imgBean != null) {
-        await Future.forEach(imgBean, ( ImgBean b) async {
-          await ImgDBHelper.instance.insertImg(b);
-        });
+      ImgBean img = await ImgDBHelper.instance.getImg(myFormatDate());
+      if (img == null) {//当数据库里面没有当天的数据时，才请求网络接口
+        final List<ImgBean> imgBean = await apiGetImgs();
+        if (imgBean != null) {
+          await Future.forEach(imgBean, (ImgBean b) async {
+            await ImgDBHelper.instance.insertImg(b);
+          });
+        }
       }
-
-      final ImgBean img = await ImgDBHelper.instance.getImg(myFormatDate());
+      img = await ImgDBHelper.instance.getImg(myFormatDate());
       if (img != null) {
         yield ImgGetSuccess(img);
       } else {

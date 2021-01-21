@@ -233,7 +233,7 @@ class MainRouteState extends BaseState<MainRoute> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // _showMenu(state?.imgBean?.url);
+                      _showMenu(state?.imgBean?.url);
                     },
                     child: Container(
                       color: Colors.grey[850],

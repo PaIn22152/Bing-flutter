@@ -35,7 +35,8 @@ class ImgDBHelper {
 
   Future<List<ImgBean>> getImgs() async {
     final dbClient = await _sql.db;
-    final List<Map> hasList = await dbClient.query(DBManager.tableImg);
+    final List<Map> hasList = await dbClient.query(DBManager.tableImg,
+        orderBy: DBManager.date + ' DESC');
     if (hasList == null || hasList.isEmpty) {
       return null;
     }
@@ -49,6 +50,7 @@ class ImgDBHelper {
   //date like "20201012"
   Future<ImgBean> getImg(String date) async {
     final dbClient = await _sql.db;
+
     final List<Map> hasList = await dbClient.query(DBManager.tableImg,
         where: '${DBManager.date} = ?', whereArgs: <String>[date]);
     if (hasList == null || hasList.isEmpty) {

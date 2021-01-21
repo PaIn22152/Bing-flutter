@@ -46,11 +46,15 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+
+            //混淆
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
             ndk {
-                //release版只需要打这一个so包，以优化apk大小
-//                abiFilters 'armeabi-v7a'
-//                abiFilters 'armeabi','armeabi-v7a'
-                abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+                //release版只需要适配arm架构，以优化apk大小
+                abiFilters 'armeabi', 'arm64-v8a', 'armeabi-v7a'
             }
         }
         debug {
