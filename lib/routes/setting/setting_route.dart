@@ -1,71 +1,73 @@
 import 'package:bing_flutter/my_all_imports.dart';
+import 'package:bing_flutter/routes/setting/bloc/setting_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingRoute extends StatefulWidget {
   @override
   _SettingRouteState createState() => _SettingRouteState();
 }
 
-class _SettingRouteState extends State<SettingRoute> {
-  double quality = spGetPicQuality();
-
-  void _updateQuality(double d) {
-    setState(() {
-      quality = d;
-    });
-  }
-
-  String _label() {
-    String label = '';
-    if (quality >= 100) {
-      label = setLabel_1;
-    } else if (quality >= 70) {
-      label = setLabel_2;
-    } else if (quality >= 45) {
-      label = setLabel_3;
-    } else {
-      label = setLabel_4;
-    }
-    return label;
-  }
+class _SettingRouteState extends BaseState<SettingRoute> {
+  final SettingBloc _settingBloc = SettingBloc();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(setTitle),
-      ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
-                child: Text(
-                  setImgQuality,
-                  style: TextStyle(fontSize: 16.sp),
-                ),
+  Widget bodyWidget() {
+    return BlocProvider(
+      create: (_) => _settingBloc..add(SettingStarted()),
+      child: BlocBuilder<SettingBloc, SettingState>(
+        builder: (context, state) {
+          if (state is SettingInitial || state is SettingChange) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text(setTitle),
               ),
-              Container(
-                child: Expanded(
-                  child: Slider(
-                      label: _label(),
-                      // label: '$quality',
-                      divisions: 3,
-                      min: 20,
-                      max: 100,
-                      value: quality,
-                      onChanged: (v) {
-                        spPutPicQuality(v);
-                        _updateQuality(v);
-                      }),
-                ),
-              )
-            ],
-          )
-        ],
+              body: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(20.w),
+                        child: Text(
+                          setImgQuality,
+                          style: TextStyle(fontSize: 20.sp, color: color_theme),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(20.w),
+                        child: Text(
+                          state.label,
+                          style: TextStyle(fontSize: 20.sp, color: color_theme),
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10.w),
+                    child: Slider(
+                        label: state.label,
+                        divisions: 3,
+                        min: 20,
+                        max: 100,
+                        value: state.quality,
+                        onChanged: (v) {
+                          spPutPicQuality(v);
+                          _settingBloc.add(SettingChanged(v));
+                        }),
+                  )
+                ],
+              ),
+            );
+          }
+          return Center(
+            child: Text('error state=$state'),
+          );
+        },
       ),
     );
   }
 }
+

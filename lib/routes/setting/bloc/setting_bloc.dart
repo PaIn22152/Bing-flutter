@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bing_flutter/my_all_imports.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -13,6 +14,8 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
   Stream<SettingState> mapEventToState(
     SettingEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    if (event is SettingChanged) {
+      yield SettingChange(event.quality);
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bing_flutter/my_all_imports.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -13,6 +14,15 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   Stream<HistoryState> mapEventToState(
     HistoryEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    if (event is HistoryStarted) {
+      final List<ImgBean> imgs = await ImgDBHelper.instance.getImgs();
+      if (imgs != null) {
+        yield HistoryGotFromDb(imgs);
+      }
+
+      ///todo for test
+      // await Future<dynamic>.delayed(const Duration(seconds: 10));
+      // yield HistoryError();
+    }
   }
 }
