@@ -10,8 +10,20 @@ class HistoryRoute extends StatefulWidget {
   _HistoryRouteState createState() => _HistoryRouteState();
 }
 
+double _lastOffset = 0.0;
+
 class _HistoryRouteState extends BaseState<HistoryRoute> {
   final HistoryBloc _historyBloc = HistoryBloc();
+
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      _lastOffset = _scrollController.offset;
+    });
+    super.initState();
+  }
 
   @override
   Widget bodyWidget() {
@@ -20,12 +32,16 @@ class _HistoryRouteState extends BaseState<HistoryRoute> {
       child: BlocBuilder<HistoryBloc, HistoryState>(
         builder: (context, state) {
           if (state is HistoryInitial || state is HistoryGotFromDb) {
+            if (state is HistoryGotFromDb) {
+              _scrollController.jumpTo(_lastOffset);
+            }
             return Scaffold(
               appBar: AppBar(
                 title: const Text(historyTitle),
               ),
               body: ListView.builder(
                   itemCount: state.imgs.length,
+                  controller: _scrollController,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                       title: Container(
