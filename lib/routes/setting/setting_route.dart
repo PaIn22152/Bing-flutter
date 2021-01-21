@@ -10,14 +10,14 @@ class SettingRoute extends StatefulWidget {
 class _SettingRouteState extends State<SettingRoute> {
   double quality = spGetPicQuality();
 
-  _updateQuality(double d) {
+  void _updateQuality(double d) {
     setState(() {
       quality = d;
     });
   }
 
   String _label() {
-    String label = "";
+    String label = '';
     if (quality >= 100) {
       label = setLabel_1;
     } else if (quality >= 70) {

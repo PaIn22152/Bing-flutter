@@ -18,7 +18,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       yield const ImgGetInProgress();
       final List<ImgBean> imgBean = await apiGetImgs();
       if (imgBean != null) {
-        await Future.forEach(imgBean, (b) async {
+        await Future.forEach(imgBean, ( ImgBean b) async {
           await ImgDBHelper.instance.insertImg(b);
         });
       }

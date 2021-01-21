@@ -14,7 +14,7 @@ class AppAnalysis extends NavigatorObserver {
 }
 
 class MyRouter {
-  static const String home = 'home';
+  static const String main = 'main';
   static const String setting = 'setting';
   static const String history = 'history';
   static const String test = 'test';
@@ -22,16 +22,16 @@ class MyRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       //根据名称跳转相应页面
-      case home:
-        return NoAnimRouter(child: HomeRoute());
+      case main:
+        return NoAnimRouter<dynamic>(child: MainRoute());
       case setting:
-        return Right2LeftRouter(child: SettingRoute());
+        return Right2LeftRouter<dynamic>(child: SettingRoute());
       case history:
-        return FadeRouter(child: HistoryRoute());
+        return FadeRouter<dynamic>(child: HistoryRoute());
       case test:
-        return FadeRouter(child: TestRoute());
+        return FadeRouter<dynamic>(child: TestRoute());
       default:
-        return MaterialPageRoute(
+        return MaterialPageRoute<dynamic>(
             builder: (_) => Scaffold(
                   body: Center(
                     child: Text('No route defined for ${settings.name}'),

@@ -14,6 +14,6 @@ void toast(String msg) {
       backgroundColor: toastBg,
       // backgroundColor: Colors.blue,
       textColor: Colors.white,
-      webPosition: "center",
+      webPosition: 'center',
       fontSize: 16.0);
 }

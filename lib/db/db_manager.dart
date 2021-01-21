@@ -50,7 +50,7 @@ class DBManager {
     logD('_onUpgrade oldVersion:$oldVersion');
     logD('_onUpgrade newVersion:$newVersion');
 
-    var batch = db.batch();
+    final batch = db.batch();
     if (oldVersion == 1) {
       batch.execute(dropTableCatalog);
       batch.execute(createTableCatalog);

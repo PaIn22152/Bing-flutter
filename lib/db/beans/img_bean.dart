@@ -21,14 +21,16 @@ class ImgBean {
   }
 
   ImgBean.fromJson(dynamic json, {bool addHeader = false}) {
-    enddate = json[enddate_key];
-    url = addHeader ? bingImgBaseUrl + json[url_key] : json[url_key];
-    copyright = json[copyright_key];
+    enddate = json[enddate_key] as String;
+    url = addHeader
+        ? bingImgBaseUrl + (json[url_key] as String)
+        : json[url_key] as String;
+    copyright = json[copyright_key] as String;
   }
 
   static List<ImgBean> parseList(dynamic json) {
     final List<ImgBean> ans = [];
-    json[images_key].forEach((v) {
+    json[images_key].forEach((dynamic v) {
       ans.add(ImgBean.fromJson(v, addHeader: true));
     });
     return ans;

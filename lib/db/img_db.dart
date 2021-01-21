@@ -19,7 +19,7 @@ class ImgDBHelper {
     final dbClient = await _sql.db;
 
     final List<Map> hasList = await dbClient.query(DBManager.tableImg,
-        where: '${DBManager.date} = ?', whereArgs: [imgBean.enddate]);
+        where: '${DBManager.date} = ?', whereArgs: <String>[imgBean.enddate]);
 
     var result = 0;
     if (hasList.isNotEmpty) {
@@ -50,7 +50,7 @@ class ImgDBHelper {
   Future<ImgBean> getImg(String date) async {
     final dbClient = await _sql.db;
     final List<Map> hasList = await dbClient.query(DBManager.tableImg,
-        where: '${DBManager.date} = ?', whereArgs: [date]);
+        where: '${DBManager.date} = ?', whereArgs: <String>[date]);
     if (hasList == null || hasList.isEmpty) {
       return null;
     }

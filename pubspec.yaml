@@ -53,6 +53,11 @@ dependencies:
   fijkplayer: ^0.8.7
   # 状态管理
   flutter_bloc: ^6.1.1
+  # 路由管理
+  fluro: ^1.7.8
+  #图片缩放
+  flutter_drag_scale:
+    git: https://github.com/LiuC520/flutter_drag_scale.git
 
 dev_dependencies:
   flutter_test:

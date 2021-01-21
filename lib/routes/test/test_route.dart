@@ -1,4 +1,3 @@
-import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -86,7 +85,8 @@ class _TestRouteState extends State<TestRoute> {
     return BlocBuilder<CounterBloc, int>(
       cubit: bloc,
       buildWhen: (previousState, state) {
-        return state % 2 == 0;
+        return state.isEven;
+        // return state % 2 == 0;
       },
       builder: (context, state) {
         return Container(
@@ -94,15 +94,6 @@ class _TestRouteState extends State<TestRoute> {
         );
       },
     );
-  }
-
-  Widget _blocConsumer() {
-    return BlocConsumer(
-        cubit: bloc,
-        builder: (c, s) {
-          return Text('_blocConsumer  state=$s');
-        },
-        listener: (c, s) {});
   }
 
   CounterBloc bloc = CounterBloc();
@@ -116,7 +107,7 @@ class _TestRouteState extends State<TestRoute> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text('widget.title 👿'),
+        title: const Text('widget.title 👿'),
       ),
       body: Column(
         children: [
@@ -127,16 +118,15 @@ class _TestRouteState extends State<TestRoute> {
             onPressed: () {
               _increment();
             },
-            child: Text('add 1'),
+            child: const Text('add 1'),
           ),
           RaisedButton(
             onPressed: () {
               _reduce();
             },
-            child: Text('reduce 1'),
+            child: const Text('reduce 1'),
           ),
           _blocBuilder(),
-          _blocConsumer(),
           // _blocListener(),
         ],
       ),

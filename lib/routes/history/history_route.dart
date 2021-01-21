@@ -11,7 +11,7 @@ class HistoryRoute extends StatefulWidget {
 class _HistoryRouteState extends State<HistoryRoute> {
   List<ImgBean> imgs = List();
 
-  _updateData(List<ImgBean> list) {
+  void _updateData(List<ImgBean> list) {
     setState(() {
       imgs = list;
     });
@@ -22,7 +22,7 @@ class _HistoryRouteState extends State<HistoryRoute> {
     ImgDBHelper.instance.getImgs().then((value) => _updateData(value));
     return Scaffold(
       appBar: AppBar(
-        title: Text(historyTitle),
+        title: const Text(historyTitle),
       ),
       body: ListView.builder(
           // physics: ClampingScrollPhysics(),
@@ -31,41 +31,36 @@ class _HistoryRouteState extends State<HistoryRoute> {
             return ListTile(
               title: Container(
                   width: 360.w,
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10.w),
+                  height: 200.w,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10.w),
                   child: Stack(
                     children: [
-                      Positioned(
-                        child: Center(
-                          // child: Image.network(img.url),
-                          child: CachedNetworkImage(
-                            imageUrl: imgs[index].url,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: CachedNetworkImage(
+                          imageUrl: imgs[index].url,
+                          placeholder: (context, url) =>
+                              const CupertinoActivityIndicator(),
+                          errorWidget: (context, url, dynamic error) =>
+                              const Icon(Icons.error),
                         ),
                       ),
-                      Stack(
-                        children: [
-                          Container(
-                            width: 360.w,
-                            height: 40.w,
-                            color: historyDateBg,
+                      Container(
+                        width: 360.w,
+                        height: 40.w,
+                        color: historyDateBg,
+                        child: Center(
+                          child: Text(
+                            imgs[index].enddate,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 15.sp),
                           ),
-                          Center(
-                            child: Text(
-                              imgs[index].enddate,
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 15.sp),
-                            ),
-                          )
-                        ],
+                        ),
                       )
                     ],
                   )),
               onTap: () {
-                logD("onTap");
+                logD('onTap');
                 Navigator.pop(context, imgs[index]);
               },
             );

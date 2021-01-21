@@ -3,83 +3,31 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bing_flutter/my_all_imports.dart';
+import 'package:bing_flutter/routes/main/bloc/main_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_drag_scale/flutter_drag_scale.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class HomeRoute extends StatefulWidget {
+class MainRoute extends StatefulWidget {
   @override
-  _HomeRouteState createState() => _HomeRouteState();
+  MainRouteState createState() => MainRouteState();
 }
 
-class _HomeRouteState extends State<HomeRoute> {
-  ImgBean _img;
+class MainRouteState extends BaseState<MainRoute> {
+  bool _doubleClick = false;
+  final MainBloc _mainBloc = MainBloc();
 
-  bool toGet = true;
-
-  _initImg() {
-    // ??= 赋值运算符，当变量的值为null时，执行赋值语句，否则不赋值
-    // _img ??= ImgBean(formatDateNow(), testImgUrl2, testCopyRight2);
-  }
-
-  _updateImg(ImgBean img) {
-    if (img != null) {
-      setState(() {
-        this._img = img;
-      });
-    }
-  }
-
-  _regetUrl() {
-    setState(() {
-      this.toGet = true;
-    });
-  }
-
-  _getUrl() async {
-    // logD(" get url start  11");
-    // if (toGet) {
-    //   toGet = false;
-    //   logD(" get url start");
-    //   var url = await getImgsFromNet();
-    //   if (url != null) {
-    //     logD(" get url 111");
-    //     _updateImg(url);
-    //   } else {
-    //     logD(" get url 2222");
-    //     _updateImg(ImgBean(formatDateNow(), testImgUrl2, testCopyRight2));
-    //   }
-    // }
-  }
-
-  //保存图片前，先申请存储权限
-  _requestStorePermission() async {
-    await Permission.storage.request();
-    if (await Permission.storage.isGranted) {
-      logD("权限授权成功！");
-      _saveAndUpdateSys(
-          _img.url, md5.convert(utf8.encode(_img.url)).toString());
-    } else {
-      toast(toastNeedPermission);
-    }
-  }
-
-  //保存图片并通知系统更新
-  _saveAndUpdateSys(String url, String name) async {
-    double quality = await spGetPicQuality();
-    var response = await Dio()
-        .get(url, options: Options(responseType: ResponseType.bytes));
-    final result = await ImageGallerySaver.saveImage(
-        Uint8List.fromList(response.data),
-        quality: quality.toInt(),
-        name: name);
-    logD("  _getHttp result=$result");
-    toast(toastSavedImg + result);
+  @override
+  Color bgColor() {
+    return Colors.grey[600];
   }
 
   //菜单栏默认字体样式（大小，颜色，是否加粗等）
@@ -91,14 +39,13 @@ class _HomeRouteState extends State<HomeRoute> {
     );
   }
 
-  void _showMenu() {
-    showCupertinoModalPopup(
+  void _showMenu(String url) {
+    showCupertinoModalPopup<dynamic>(
         context: context,
         builder: (BuildContext context) {
           return CupertinoActionSheet(
-            title: Text(
+            title: const Text(
               homeMenuTitle,
-              // style: _defMenuStyle(),
             ),
             actions: <Widget>[
               CupertinoActionSheetAction(
@@ -115,11 +62,16 @@ class _HomeRouteState extends State<HomeRoute> {
                   //     .then((value) => {
                   //       logD("value=$value")}
                   //       );
-                  var result = await Navigator.push(context,
+                  final ImgBean result = await Navigator.push(context,
                       MaterialPageRoute(builder: (context) {
-                    return new HistoryRoute();
+                    return HistoryRoute();
                   }));
-                  _updateImg(result);
+                  logD('result=$result');
+                  if (result != null) {
+                    _mainBloc.add(MainChanged(result));
+                  }
+
+                  // context.read<MainBloc>().add(MainChanged(result));
                 },
                 // isDefaultAction: true,
                 isDestructiveAction: true,
@@ -143,7 +95,7 @@ class _HomeRouteState extends State<HomeRoute> {
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  _requestStorePermission();
+                  _requestStorePermission(url);
                 },
                 isDestructiveAction: true,
               ),
@@ -153,8 +105,8 @@ class _HomeRouteState extends State<HomeRoute> {
                   style: _defMenuStyle(),
                 ),
                 onPressed: () {
-                  if (_img != null) {
-                    Clipboard.setData(ClipboardData(text: _img.url));
+                  if (url != null && url.isNotEmpty) {
+                    Clipboard.setData(ClipboardData(text: url));
                     toast(toastCopiedUrl);
                     Navigator.pop(context);
                   }
@@ -176,72 +128,142 @@ class _HomeRouteState extends State<HomeRoute> {
         });
   }
 
-  bool doubleClick = false;
-
   Future<bool> _exitApp() {
-    if (doubleClick) {
-      return new Future.value(true);
+    if (_doubleClick) {
+      return Future.value(true);
     } else {
-      doubleClick = true;
-
-      //延时
-      Timer(Duration(seconds: 2), () {
-        doubleClick = false;
+      _doubleClick = true;
+      Timer(const Duration(seconds: 2), () {
+        _doubleClick = false;
       });
       toast(toastExitApp);
-      return new Future.value(false);
+      return Future.value(false);
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    _initImg();
-    _getUrl();
-
-
-    Widget body;
-    if (_img != null) {
-      body = Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              _showMenu();
-            },
-            child: Container(
-              color: Colors.grey[850],
-              child: Center(
-                // child: Image.network(img.url),
-                child: CachedNetworkImage(
-                  imageUrl: _img.url,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
-              color: homeCopyrightBg,
-              child: Text(
-                _img.copyright,
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 15.sp, color: Colors.white),
-              ),
-            ),
-          ),
-        ],
-      );
+  //保存图片前，先申请存储权限
+  Future _requestStorePermission(String url) async {
+    await Permission.storage.request();
+    if (await Permission.storage.isGranted) {
+      logD('权限授权成功！');
+      _saveAndUpdateSys(url, md5.convert(utf8.encode(url)).toString());
     } else {
-      body = Container();
+      toast(toastNeedPermission);
     }
-    return WillPopScope(
-      onWillPop: () => _exitApp(),
-      child: Scaffold(
-        body: body,
+  }
+
+  //保存图片并通知系统更新
+  Future _saveAndUpdateSys(String url, String name) async {
+    final double quality = spGetPicQuality();
+    final response = await Dio()
+        .get<dynamic>(url, options: Options(responseType: ResponseType.bytes));
+    final dynamic result = await ImageGallerySaver.saveImage(
+        Uint8List.fromList(response.data as List<int>),
+        quality: quality.toInt(),
+        name: name);
+    logD('_getHttp result=$result');
+    toast(toastSavedImg + (result['filePath'] as String));
+  }
+
+  @override
+  Widget bodyWidget() {
+    return BlocProvider<MainBloc>(
+      create: (_) => _mainBloc..add(MainStarted()),
+      child: WillPopScope(
+        onWillPop: _exitApp,
+        child: BlocBuilder<MainBloc, MainState>(builder: (context, state) {
+          if (state is MainInitial) {
+            return Container();
+          }
+          if (state is ImgGetInProgress) {
+            return const Center(
+              child: CupertinoActivityIndicator(
+                radius: 70,
+              ),
+            );
+          }
+          if (state is ImgGetSuccess || state is ImgChanged) {
+            return Stack(
+              children: [
+                DragScaleContainer(
+                  doubleTapStillScale: true,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showMenu(state.imgBean.url);
+                      },
+                      child: Container(
+                        color: Colors.grey[850],
+                        child: Center(
+                          child: CachedNetworkImage(
+                            imageUrl: state.imgBean.url,
+                            placeholder: (context, url) =>
+                                const CupertinoActivityIndicator(
+                              radius: 70,
+                            ),
+                            errorWidget: (context, url, dynamic error) =>
+                                const Icon(Icons.error),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
+                    color: homeCopyrightBg,
+                    child: Text(
+                      state.imgBean.copyright,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 15.sp, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          if (state is ImgGetFailure) {
+            return Center(
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // _showMenu(state?.imgBean?.url);
+                    },
+                    child: Container(
+                      color: Colors.grey[850],
+                      child: Center(
+                        child: Image.asset('${jpg_header}th.jpg'),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
+                      color: homeCopyrightBg,
+                      child: Text(
+                        'default image!',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 15.sp, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return const Center(
+            child: Text('Error state!!!'),
+          );
+        }),
       ),
     );
   }
