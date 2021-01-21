@@ -66,7 +66,7 @@ class MainRouteState extends BaseState<MainRoute> {
                       MaterialPageRoute(builder: (context) {
                     return HistoryRoute();
                   }));
-                  logD('result=$result');
+                  // logD('result=$result');
                   if (result != null) {
                     _mainBloc.add(MainChanged(result));
                   }

@@ -21,6 +21,7 @@ class _HistoryRouteState extends BaseState<HistoryRoute> {
   void initState() {
     _scrollController.addListener(() {
       _lastOffset = _scrollController.offset;
+      // logD('addListener  _lastOffset=$_lastOffset');
     });
     super.initState();
   }
@@ -33,6 +34,7 @@ class _HistoryRouteState extends BaseState<HistoryRoute> {
         builder: (context, state) {
           if (state is HistoryInitial || state is HistoryGotFromDb) {
             if (state is HistoryGotFromDb) {
+              // logD('jumpTo  _lastOffset=$_lastOffset');
               _scrollController.jumpTo(_lastOffset);
             }
             return Scaffold(
