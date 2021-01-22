@@ -15,6 +15,7 @@ export 'main.dart';
 export 'net/bing_api.dart';
 export 'res/colors.dart';
 export 'res/strings.dart';
+export 'route_manager.dart';
 export 'routes/history/history_route.dart';
 export 'routes/main/main_route.dart';
 export 'routes/my_router.dart';

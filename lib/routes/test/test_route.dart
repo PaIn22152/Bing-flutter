@@ -3,10 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 ///测试用路由，会在此写一些测试用代码
+///
+
+class TestData{
+  final int age;
+  final String name;
+
+  TestData(this.age, this.name);
+}
 
 class TestRoute extends StatefulWidget {
+  TestData _testData;
+
+  TestRoute(this._testData);
+
   @override
-  _TestRouteState createState() => _TestRouteState();
+  _TestRouteState createState() => _TestRouteState(_testData);
 }
 
 class MyBlocObserver extends BlocObserver {
@@ -73,6 +85,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 class _TestRouteState extends State<TestRoute> {
+  TestData _testData;
+
+  _TestRouteState(this._testData);
+
   Future<void> _increment() async {
     bloc.add(CounterEvent.increment);
   }
@@ -111,6 +127,9 @@ class _TestRouteState extends State<TestRoute> {
       ),
       body: Column(
         children: [
+          Center(
+            child: Text('name=${_testData?.name}  age=${_testData?.age}'),
+          ),
           Center(
             child: Text('cubit=${bloc.state}'),
           ),

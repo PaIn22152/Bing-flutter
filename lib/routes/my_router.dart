@@ -25,11 +25,11 @@ class MyRouter {
       case main:
         return NoAnimRouter<dynamic>(child: MainRoute());
       case setting:
-        return Right2LeftRouter<dynamic>(child: SettingRoute());
+        return Bottom2TopRouter<dynamic>(child: SettingRoute());
       case history:
-        return FadeRouter<dynamic>(child: HistoryRoute());
+        return ScaleFadeRotateRouter<dynamic>(child: HistoryRoute());
       case test:
-        return FadeRouter<dynamic>(child: TestRoute());
+        return FadeRouter<dynamic>(child: TestRoute(null));
       default:
         return MaterialPageRoute<dynamic>(
             builder: (_) => Scaffold(

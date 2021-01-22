@@ -55,23 +55,12 @@ class MainRouteState extends BaseState<MainRoute> {
                 ),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  // var reslut = await Navigator.of(context).pushNamed(MyRouter.history);
-                  // logD("result=$reslut");
-                  // Navigator.of(context)
-                  //     .pushNamed(MyRouter.history)
-                  //     .then((value) => {
-                  //       logD("value=$value")}
-                  //       );
-                  final ImgBean result = await Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                    return HistoryRoute();
-                  }));
+                  final result =
+                      await Navigator.of(context).pushNamed(history_route);
                   // logD('result=$result');
-                  if (result != null) {
+                  if (result is ImgBean) {
                     _mainBloc.add(MainChanged(result));
                   }
-
-                  // context.read<MainBloc>().add(MainChanged(result));
                 },
                 // isDefaultAction: true,
                 isDestructiveAction: true,
@@ -82,9 +71,8 @@ class MainRouteState extends BaseState<MainRoute> {
                   style: _defMenuStyle(),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
-                  // _regetUrl();
-                  Navigator.of(context).pushNamed(MyRouter.setting);
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(setting_route);
                 },
                 isDestructiveAction: true,
               ),
@@ -94,7 +82,7 @@ class MainRouteState extends BaseState<MainRoute> {
                   style: _defMenuStyle(),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                   _requestStorePermission(url);
                 },
                 isDestructiveAction: true,
@@ -108,7 +96,7 @@ class MainRouteState extends BaseState<MainRoute> {
                   if (url != null && url.isNotEmpty) {
                     Clipboard.setData(ClipboardData(text: url));
                     toast(toastCopiedUrl);
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   }
                 },
                 isDestructiveAction: true,
@@ -119,7 +107,10 @@ class MainRouteState extends BaseState<MainRoute> {
                   style: _defMenuStyle(),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(MyRouter.test);
+                  Navigator.of(context).pop();
+
+                  Navigator.of(context)
+                      .pushNamed(test_route, arguments: TestData(11, 'name'));
                 },
                 isDestructiveAction: true,
               ),
