@@ -12,10 +12,14 @@ class HistoryRoute extends StatefulWidget {
 
 double _lastOffset = 0.0;
 
-class _HistoryRouteState extends BaseState<HistoryRoute> {
+class _HistoryRouteState extends BaseState<HistoryRoute>
+    with SingleTickerProviderStateMixin {
   final HistoryBloc _historyBloc = HistoryBloc();
 
   final ScrollController _scrollController = ScrollController();
+
+  AnimationController _controller;
+  CurvedAnimation _anim;
 
   @override
   void initState() {
@@ -23,6 +27,13 @@ class _HistoryRouteState extends BaseState<HistoryRoute> {
       _lastOffset = _scrollController.offset;
       // logD('addListener  _lastOffset=$_lastOffset');
     });
+    _controller = AnimationController(
+        lowerBound: 0.8,
+        upperBound: 1.0,
+        duration: const Duration(milliseconds: 1200),
+        vsync: this);
+    _anim = CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack);
+    _controller.repeat(reverse: true);
     super.initState();
   }
 
@@ -41,47 +52,84 @@ class _HistoryRouteState extends BaseState<HistoryRoute> {
               appBar: AppBar(
                 title: const Text(historyTitle),
               ),
-              body: ListView.builder(
-                  itemCount: state.imgs.length,
-                  controller: _scrollController,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Container(
-                          width: 360.w,
-                          height: 200.w,
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 10.w),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.topCenter,
-                                child: CachedNetworkImage(
-                                  imageUrl: state.imgs[index].url,
-                                  placeholder: (context, url) =>
-                                      const CupertinoActivityIndicator(),
-                                  errorWidget: (context, url, dynamic error) =>
-                                      const Icon(Icons.error),
-                                ),
+              body: Stack(
+                children: [
+                  ListView.builder(
+                      itemCount: state.imgs.length,
+                      controller: _scrollController,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Container(
+                              width: 360.w,
+                              height: 200.w,
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 10.w),
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: CachedNetworkImage(
+                                      imageUrl: state.imgs[index].url,
+                                      placeholder: (context, url) =>
+                                          const CupertinoActivityIndicator(),
+                                      errorWidget:
+                                          (context, url, dynamic error) =>
+                                              const Icon(Icons.error),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 360.w,
+                                    height: 40.w,
+                                    color: historyDateBg,
+                                    child: Center(
+                                      child: Text(
+                                        state.imgs[index].enddate,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15.sp),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )),
+                          onTap: () {
+                            logD('onTap');
+                            Navigator.pop(context, state.imgs[index]);
+                          },
+                        );
+                      }),
+                  Container(
+                      margin: EdgeInsets.all(10.w),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ScaleTransition(
+                            scale: _anim,
+                            child: Container(
+                              width: 60.w,
+                              height: 50.w,
+                              decoration: BoxDecoration(
+                                color: const Color(0x88000000),
+                                borderRadius: BorderRadius.circular(7.w),
                               ),
-                              Container(
-                                width: 360.w,
-                                height: 40.w,
-                                color: historyDateBg,
-                                child: Center(
-                                  child: Text(
-                                    state.imgs[index].enddate,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 15.sp),
+                              child: Container(
+                                margin: EdgeInsets.all(10.w),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _scrollController.animateTo(0.0,
+                                        duration: const Duration(seconds: 1),
+                                        curve: Curves.fastLinearToSlowEaseIn);
+                                  },
+                                  child: Center(
+                                    child: Image.asset(
+                                      '${png_header}back-up.png',
+                                      color: color_theme,
+                                    ),
                                   ),
                                 ),
-                              )
-                            ],
-                          )),
-                      onTap: () {
-                        logD('onTap');
-                        Navigator.pop(context, state.imgs[index]);
-                      },
-                    );
-                  }),
+                              ),
+                            )),
+                      )),
+                ],
+              ),
             );
           }
           return Center(
