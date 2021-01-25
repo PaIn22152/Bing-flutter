@@ -8,16 +8,16 @@ part 'history_event.dart';
 part 'history_state.dart';
 
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
-  HistoryBloc() : super(HistoryInitial());
+  HistoryBloc() : super(HistoryInitialState());
 
   @override
   Stream<HistoryState> mapEventToState(
     HistoryEvent event,
   ) async* {
-    if (event is HistoryStarted) {
+    if (event is HistoryStartedEvent) {
       final List<ImgBean> imgs = await ImgDBHelper.instance.getImgs();
       if (imgs != null) {
-        yield HistoryGotFromDb(imgs);
+        yield HistoryGotFromDbState(imgs);
       }
 
       ///todo for test

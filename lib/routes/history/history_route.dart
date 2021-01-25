@@ -38,13 +38,19 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget bodyWidget() {
     return BlocProvider(
-      create: (_) => _historyBloc..add(HistoryStarted()),
+      create: (_) => _historyBloc..add(HistoryStartedEvent()),
       child: BlocBuilder<HistoryBloc, HistoryState>(
         builder: (context, state) {
-          if (state is HistoryInitial || state is HistoryGotFromDb) {
-            if (state is HistoryGotFromDb) {
+          if (state is HistoryInitialState || state is HistoryGotFromDbState) {
+            if (state is HistoryGotFromDbState) {
               // logD('jumpTo  _lastOffset=$_lastOffset');
               _scrollController.jumpTo(_lastOffset);
             }

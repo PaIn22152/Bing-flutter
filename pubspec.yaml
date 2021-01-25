@@ -20,9 +20,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.0
-  # english_words的开源软件包 ，其中包含数千个最常用的英文单词以及一些实用功能
-  english_words: ^3.1.5
   # 网络请求
   http: ^0.12.2
   # 网络请求
@@ -47,8 +44,6 @@ dependencies:
   date_format: ^1.0.9
   # 屏幕适配
   flutter_screenutil: ^4.0.2+3
-  # 视频播放，ijkplayer 的 Flutter 封装
-  fijkplayer: ^0.8.7
   # 状态管理
   flutter_bloc: ^6.1.1
   # 路由管理
@@ -67,3 +62,16 @@ flutter:
     - assets/png/
     - assets/jpg/
     - assets/font/
+  fonts:
+    - family: pottaOne                # 字体别名
+      fonts:
+        - asset: assets/font/PottaOne-Regular.ttf  # 字体文件目录
+    #        weight: 700              # 权重 700表示粗体，相当于bold
+    - family: Nunito
+      fonts:
+        - asset: assets/font/Nunito-Regular.ttf
+        - asset: assets/font/Nunito-SemiBold.ttf
+        - asset: assets/font/Nunito-Bold.ttf
+          weight: 700
+
+

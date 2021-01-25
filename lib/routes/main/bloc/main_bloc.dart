@@ -9,14 +9,14 @@ part 'main_event.dart';
 part 'main_state.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
-  MainBloc() : super(const MainInitial());
+  MainBloc() : super(const MainInitialState());
 
   @override
   Stream<MainState> mapEventToState(
     MainEvent event,
   ) async* {
-    if (event is MainStarted) {
-      yield const ImgGetInProgress();
+    if (event is MainStartedEvent) {
+      yield const ImgGetInProgressState();
       ImgBean img = await ImgDBHelper.instance.getImg(myFormatDate());
       if (img == null) {//当数据库里面没有当天的数据时，才请求网络接口
         final List<ImgBean> imgBean = await apiGetImgs();
@@ -28,12 +28,12 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       }
       img = await ImgDBHelper.instance.getImg(myFormatDate());
       if (img != null) {
-        yield ImgGetSuccess(img);
+        yield ImgGetSuccessState(img);
       } else {
-        yield const ImgGetFailure();
+        yield const ImgGetFailureState();
       }
-    } else if (event is MainChanged) {
-      yield ImgChanged(event.newImg);
+    } else if (event is MainChangedEvent) {
+      yield ImgChangedState(event.newImg);
     }
   }
 }

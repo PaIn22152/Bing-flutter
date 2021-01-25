@@ -49,13 +49,35 @@ String spTestGet() {
   return _spGetDef(_key_test, '') as String;
 }
 
-//下载图片质量
-const String key_pic_quality = 'key_pic_quality';
+///下载图片质量
+const String _key_pic_quality = 'key_pic_quality';
 
 Future<bool> spPutPicQuality(double i) {
-  return _spPutDouble(key_pic_quality, i);
+  return _spPutDouble(_key_pic_quality, i);
 }
 
 double spGetPicQuality() {
-  return _spGetDef(key_pic_quality, 50.toDouble()) as double;
+  return _spGetDef(_key_pic_quality, 50.toDouble()) as double;
+}
+
+/// 是否使用暗黑模式
+const String _key_dark_theme = '_key_dark_theme';
+
+Future<bool> spPutDarkTheme(bool b) {
+  return _spPutBool(_key_dark_theme, b);
+}
+
+bool spGetDarkTheme() {
+  return _spGetDef(_key_dark_theme, false) as bool;
+}
+
+///是否全屏
+const String _key_full_screen = '_key_full_screen';
+
+Future<bool> spPutFullScreen(bool b) {
+  return _spPutBool(_key_full_screen, b);
+}
+
+bool spGetFullScreen() {
+  return _spGetDef(_key_full_screen, false) as bool;
 }

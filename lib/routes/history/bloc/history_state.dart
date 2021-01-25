@@ -7,14 +7,14 @@ abstract class HistoryState {
   const HistoryState(this.imgs);
 }
 
-class HistoryInitial extends HistoryState {
-  HistoryInitial() : super(<ImgBean>[]);
+class HistoryInitialState extends HistoryState {
+  HistoryInitialState() : super(<ImgBean>[]);
 }
 
-class HistoryError extends HistoryState {
-  HistoryError() : super(<ImgBean>[]);
+class HistoryErrorState extends HistoryState {
+  HistoryErrorState() : super(<ImgBean>[]);
 }
 
-class HistoryGotFromDb extends HistoryState {
-  const HistoryGotFromDb(List<ImgBean> imgs) : super(imgs);
+class HistoryGotFromDbState extends HistoryState {
+  const HistoryGotFromDbState(List<ImgBean> imgs) : super(imgs);
 }

@@ -3,8 +3,10 @@ part of 'setting_bloc.dart';
 @immutable
 abstract class SettingState {
   final double quality;
+  final bool darkTheme;
+  final bool fullScreen;
 
-  const SettingState(this.quality);
+  const SettingState(this.quality, this.darkTheme, this.fullScreen);
 
   String get label {
     String label = '';
@@ -21,10 +23,22 @@ abstract class SettingState {
   }
 }
 
-class SettingInitial extends SettingState {
-  SettingInitial() : super(spGetPicQuality());
+class SettingInitialState extends SettingState {
+  SettingInitialState()
+      : super(spGetPicQuality(), spGetDarkTheme(), spGetFullScreen());
 }
 
-class SettingChange extends SettingState {
-  const SettingChange(double quality) : super(quality);
+class SettingChangeQualityState extends SettingState {
+  SettingChangeQualityState(double quality)
+      : super(quality, spGetDarkTheme(), spGetFullScreen());
+}
+
+class SettingChangeDarkThemeState extends SettingState {
+  SettingChangeDarkThemeState(bool darkTheme)
+      : super(spGetPicQuality(), darkTheme, spGetFullScreen());
+}
+
+class SettingChangeFullScreenState extends SettingState {
+  SettingChangeFullScreenState(bool fullScreen)
+      : super(spGetPicQuality(), spGetDarkTheme(), fullScreen);
 }

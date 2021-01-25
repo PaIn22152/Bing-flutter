@@ -3,10 +3,22 @@ part of 'setting_bloc.dart';
 @immutable
 abstract class SettingEvent {}
 
-class SettingStarted extends SettingEvent {}
+class SettingStartedEvent extends SettingEvent {}
 
-class SettingChanged extends SettingEvent {
+class SettingQualityChangedEvent extends SettingEvent {
   final double quality;
 
-  SettingChanged(this.quality);
+  SettingQualityChangedEvent(this.quality);
+}
+
+class SettingDarkThemeChangedEvent extends SettingEvent {
+  final bool darkTheme;
+
+  SettingDarkThemeChangedEvent(this.darkTheme);
+}
+
+class SettingFullScreenChangedEvent extends SettingEvent {
+  final bool fullScreen;
+
+  SettingFullScreenChangedEvent(this.fullScreen);
 }

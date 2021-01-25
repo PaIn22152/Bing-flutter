@@ -31,6 +31,7 @@ final testHandler =
 });
 
 void defineRoutes() {
+  logD(' defineRoutes ');
   myRouter.define(main_route, handler: mainHandler);
   myRouter.define(setting_route,
       handler: setHandler, transitionType: TransitionType.inFromRight);

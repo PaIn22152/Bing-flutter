@@ -15,6 +15,8 @@ const String toastExitApp = '再按一次退出应用';
 
 const String setTitle = '设置';
 const String setImgQuality = '下载图片质量';
+const String setDarkTheme = '暗黑模式';
+const String setFullScreen = '是否开启全屏';
 const String setLabel_1 = '原图';
 const String setLabel_2 = '超清';
 const String setLabel_3 = '高清';

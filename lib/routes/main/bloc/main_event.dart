@@ -3,10 +3,10 @@ part of 'main_bloc.dart';
 @immutable
 abstract class MainEvent {}
 
-class MainStarted extends MainEvent {}
+class MainStartedEvent extends MainEvent {}
 
-class MainChanged extends MainEvent {
+class MainChangedEvent extends MainEvent {
   final ImgBean newImg;
 
-  MainChanged(this.newImg);
+  MainChangedEvent(this.newImg);
 }

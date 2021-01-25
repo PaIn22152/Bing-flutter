@@ -34,8 +34,8 @@ class MainRouteState extends BaseState<MainRoute> {
   TextStyle _defMenuStyle() {
     return TextStyle(
       color: Colors.blue[700],
-      fontSize: 18.sp,
-      // fontWeight: FontWeight.bold,
+      fontSize: 15.sp,
+      fontWeight: FontWeight.bold
     );
   }
 
@@ -44,8 +44,10 @@ class MainRouteState extends BaseState<MainRoute> {
         context: context,
         builder: (BuildContext context) {
           return CupertinoActionSheet(
-            title: const Text(
+            title: Text(
               homeMenuTitle,
+              style: TextStyle(
+                  color: Colors.grey, fontSize: 18.sp, fontFamily: 'pottaOne'),
             ),
             actions: <Widget>[
               CupertinoActionSheetAction(
@@ -59,7 +61,7 @@ class MainRouteState extends BaseState<MainRoute> {
                       await Navigator.of(context).pushNamed(history_route);
                   // logD('result=$result');
                   if (result is ImgBean) {
-                    _mainBloc.add(MainChanged(result));
+                    _mainBloc.add(MainChangedEvent(result));
                   }
                 },
                 // isDefaultAction: true,
@@ -159,21 +161,21 @@ class MainRouteState extends BaseState<MainRoute> {
   @override
   Widget bodyWidget() {
     return BlocProvider<MainBloc>(
-      create: (_) => _mainBloc..add(MainStarted()),
+      create: (_) => _mainBloc..add(MainStartedEvent()),
       child: WillPopScope(
         onWillPop: _exitApp,
         child: BlocBuilder<MainBloc, MainState>(builder: (context, state) {
-          if (state is MainInitial) {
+          if (state is MainInitialState) {
             return Container();
           }
-          if (state is ImgGetInProgress) {
+          if (state is ImgGetInProgressState) {
             return const Center(
               child: CupertinoActivityIndicator(
                 radius: 70,
               ),
             );
           }
-          if (state is ImgGetSuccess || state is ImgChanged) {
+          if (state is ImgGetSuccessState || state is ImgChangedState) {
             return Stack(
               children: [
                 DragScaleContainer(
@@ -218,7 +220,7 @@ class MainRouteState extends BaseState<MainRoute> {
               ],
             );
           }
-          if (state is ImgGetFailure) {
+          if (state is ImgGetFailureState) {
             return Center(
               child: Stack(
                 children: [

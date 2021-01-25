@@ -14,11 +14,16 @@ class _SettingRouteState extends BaseState<SettingRoute> {
 
   @override
   Widget bodyWidget() {
+    final ApplicationBloc applicationBloc =
+        BlocProvider.of<ApplicationBloc>(context);
     return BlocProvider(
-      create: (_) => _settingBloc..add(SettingStarted()),
+      create: (_) => _settingBloc..add(SettingStartedEvent()),
       child: BlocBuilder<SettingBloc, SettingState>(
         builder: (context, state) {
-          if (state is SettingInitial || state is SettingChange) {
+          if (state is SettingInitialState ||
+              state is SettingChangeQualityState ||
+              state is SettingChangeDarkThemeState ||
+              state is SettingChangeFullScreenState) {
             return Scaffold(
               appBar: AppBar(
                 title: const Text(setTitle),
@@ -55,8 +60,58 @@ class _SettingRouteState extends BaseState<SettingRoute> {
                         value: state.quality,
                         onChanged: (v) {
                           spPutPicQuality(v);
-                          _settingBloc.add(SettingChanged(v));
+                          _settingBloc.add(SettingQualityChangedEvent(v));
                         }),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(20.w),
+                        child: Text(
+                          setDarkTheme,
+                          style: TextStyle(fontSize: 20.sp, color: color_theme),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(20.w),
+                        child: Switch(
+                          value: state.darkTheme,
+                          onChanged: (v) async {
+                            await spPutDarkTheme(v);
+                            _settingBloc.add(SettingDarkThemeChangedEvent(v));
+                            applicationBloc.add(AppUpdatedEvent());
+                            logD(
+                                'Switch onChanged v=$v  applicationBloc=$applicationBloc');
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(20.w),
+                        child: Text(
+                          setFullScreen,
+                          style: TextStyle(fontSize: 20.sp, color: color_theme),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(20.w),
+                        child: Switch(
+                          value: state.fullScreen,
+                          onChanged: (v) async {
+                            await spPutFullScreen(v);
+                            _settingBloc.add(SettingFullScreenChangedEvent(v));
+                            applicationBloc.add(AppUpdatedEvent());
+                            logD(
+                                'Switch onChanged v=$v  applicationBloc=$applicationBloc');
+                          },
+                        ),
+                      )
+                    ],
                   )
                 ],
               ),
@@ -70,4 +125,3 @@ class _SettingRouteState extends BaseState<SettingRoute> {
     );
   }
 }
-
