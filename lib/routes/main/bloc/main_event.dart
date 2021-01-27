@@ -5,6 +5,8 @@ abstract class MainEvent {}
 
 class MainStartedEvent extends MainEvent {}
 
+class MainRefreshEvent extends MainEvent {}
+
 class MainChangedEvent extends MainEvent {
   final ImgBean newImg;
 

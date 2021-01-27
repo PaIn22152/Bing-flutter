@@ -81,8 +81,7 @@ class _SettingRouteState extends BaseState<SettingRoute> {
                             await spPutDarkTheme(v);
                             _settingBloc.add(SettingDarkThemeChangedEvent(v));
                             applicationBloc.add(AppUpdatedEvent());
-                            logD(
-                                'Switch onChanged v=$v  applicationBloc=$applicationBloc');
+                            // logD('Switch onChanged v=$v  applicationBloc=$applicationBloc');
                           },
                         ),
                       )
@@ -106,8 +105,7 @@ class _SettingRouteState extends BaseState<SettingRoute> {
                             await spPutFullScreen(v);
                             _settingBloc.add(SettingFullScreenChangedEvent(v));
                             applicationBloc.add(AppUpdatedEvent());
-                            logD(
-                                'Switch onChanged v=$v  applicationBloc=$applicationBloc');
+                            // logD('Switch onChanged v=$v  applicationBloc=$applicationBloc');
                           },
                         ),
                       )

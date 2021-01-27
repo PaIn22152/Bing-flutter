@@ -34,6 +34,7 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
         vsync: this);
     _anim = CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack);
     _controller.repeat(reverse: true);
+
     super.initState();
   }
 

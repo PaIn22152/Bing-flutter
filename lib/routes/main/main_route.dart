@@ -33,10 +33,7 @@ class MainRouteState extends BaseState<MainRoute> {
   //菜单栏默认字体样式（大小，颜色，是否加粗等）
   TextStyle _defMenuStyle() {
     return TextStyle(
-      color: Colors.blue[700],
-      fontSize: 15.sp,
-      fontWeight: FontWeight.bold
-    );
+        color: Colors.blue[700], fontSize: 15.sp, fontWeight: FontWeight.bold);
   }
 
   void _showMenu(String url) {
@@ -159,6 +156,16 @@ class MainRouteState extends BaseState<MainRoute> {
   }
 
   @override
+  void initState() {
+    SystemChrome.setApplicationSwitcherDescription(
+        const ApplicationSwitcherDescription(
+      label: 'newnnewlab',
+      primaryColor: 0xffff0000,
+    ));
+    super.initState();
+  }
+
+  @override
   Widget bodyWidget() {
     return BlocProvider<MainBloc>(
       create: (_) => _mainBloc..add(MainStartedEvent()),
@@ -175,7 +182,9 @@ class MainRouteState extends BaseState<MainRoute> {
               ),
             );
           }
-          if (state is ImgGetSuccessState || state is ImgChangedState) {
+          if (state is ImgGetSuccessState ||
+              state is ImgChangedState ||
+              state is ImgRefreshState) {
             return Stack(
               children: [
                 DragScaleContainer(
@@ -239,14 +248,20 @@ class MainRouteState extends BaseState<MainRoute> {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
-                      color: homeCopyrightBg,
-                      child: Text(
-                        'default image!',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 15.sp, color: Colors.white),
+                    child: InkWell(
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(20.w, 24.w, 20.w, 24.w),
+                        color: homeCopyrightBg,
+                        child: Text(
+                          '获取图片失败!点击重试。',
+                          textAlign: TextAlign.left,
+                          style:
+                              TextStyle(fontSize: 15.sp, color: Colors.white),
+                        ),
                       ),
+                      onTap: () {
+                        _mainBloc.add(MainRefreshEvent());
+                      },
                     ),
                   ),
                 ],

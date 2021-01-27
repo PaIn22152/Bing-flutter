@@ -13,19 +13,28 @@ void main() {
     runApp(BlocProvider<ApplicationBloc>(
       child: BlocBuilder<ApplicationBloc, ApplicationState>(
           builder: (context, state) {
-        logD('ApplicationBloc state=$state');
-
         //设置全屏
         if (spGetFullScreen()) {
           SystemChrome.setEnabledSystemUIOverlays([]);
         } else {
-          SystemChrome.restoreSystemUIOverlays();
+          SystemChrome.setEnabledSystemUIOverlays(
+              [SystemUiOverlay.top, SystemUiOverlay.bottom]);
         }
+
         return MyApp();
       }),
       create: (_) => ApplicationBloc()..add(AppStartedEvent()),
     ));
   });
+}
+
+final _map = <String, bool>{};
+
+void _runOnlyOnce(String tag, Function f) {
+  if (!(_map[tag] ?? false)) {
+    f();
+    _map[tag] = true;
+  }
 }
 
 class Global {
@@ -35,10 +44,6 @@ class Global {
 
     //初始化sp
     await spInit();
-
-    //设置全屏
-    // SystemChrome.setEnabledSystemUIOverlays([]);
-    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
 
     callback();
   }
@@ -52,7 +57,17 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    defineRoutes();
+    // logD('MyAppState  build');
+    _runOnlyOnce('masb', () {
+      // logD('_runOnlyOnce');
+      //禁用横屏，强制竖屏
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+      defineRoutes();
+    });
+
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       allowFontScaling: false,
@@ -70,14 +85,6 @@ class MyAppState extends State<MyApp> {
 
           // Define the default font family.
           fontFamily: 'Nunito',
-
-          // Define the default TextTheme. Use this to specify the default
-          // text styling for headlines, titles, bodies of text, and more.
-          // textTheme: const TextTheme(
-          //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          //   bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-          // ),
         ),
         home: MainRoute(),
       ),

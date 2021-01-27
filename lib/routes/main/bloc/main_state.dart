@@ -29,3 +29,8 @@ class ImgGetFailureState extends MainState {
 class ImgChangedState extends MainState {
   const ImgChangedState(ImgBean imgBean) : super(imgBean);
 }
+
+///图片刷新
+class ImgRefreshState extends MainState {
+  const ImgRefreshState(ImgBean imgBean) : super(imgBean);
+}

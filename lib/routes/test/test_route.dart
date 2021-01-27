@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///测试用路由，会在此写一些测试用代码
 ///
 
-class TestData{
+class TestData {
   final int age;
   final String name;
 
@@ -122,30 +122,59 @@ class _TestRouteState extends State<TestRoute> {
       setState(() {});
     });
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('widget.title 👿'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('widget.title 👿'),
+      // ),
       body: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Center(
-            child: Text('name=${_testData?.name}  age=${_testData?.age}'),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              width: 120,
+              height: 120,
+              color: Colors.blue,
+              child: Center(
+                child: Text('topLeft'),
+              ),
+            ),
           ),
           Center(
-            child: Text('cubit=${bloc.state}'),
+              child: Container(
+                height: 80,
+            color: Colors.green,
+            child: Text('Center'),
+          )),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              width: 120,
+              height: 120,
+              color: Colors.red,
+              child: Center(
+                child: Text('bottomRight'),
+              ),
+            ),
           ),
-          RaisedButton(
-            onPressed: () {
-              _increment();
-            },
-            child: const Text('add 1'),
-          ),
-          RaisedButton(
-            onPressed: () {
-              _reduce();
-            },
-            child: const Text('reduce 1'),
-          ),
-          _blocBuilder(),
+          // Center(
+          //   child: Text('name=${_testData?.name}  age=${_testData?.age}'),
+          // ),
+          // Center(
+          //   child: Text('cubit=${bloc.state}'),
+          // ),
+          // RaisedButton(
+          //   onPressed: () {
+          //     _increment();
+          //   },
+          //   child: const Text('add 1'),
+          // ),
+          // RaisedButton(
+          //   onPressed: () {
+          //     _reduce();
+          //   },
+          //   child: const Text('reduce 1'),
+          // ),
+          // _blocBuilder(),
           // _blocListener(),
         ],
       ),
