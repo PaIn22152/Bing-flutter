@@ -1,3 +1,4 @@
+import 'package:bing_flutter/my_all_imports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,33 +20,6 @@ class TestRoute extends StatefulWidget {
 
   @override
   _TestRouteState createState() => _TestRouteState(_testData);
-}
-
-class MyBlocObserver extends BlocObserver {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    print('MyBlocObserver bloc = $bloc ; event = $event');
-    super.onEvent(bloc, event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    print('MyBlocObserver bloc = $bloc ; transition = $transition');
-    super.onTransition(bloc, transition);
-  }
-
-  @override
-  void onChange(Cubit cubit, Change change) {
-    print('MyBlocObserver cubit = $cubit ; change = $change');
-    super.onChange(cubit, change);
-  }
-
-  @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print(
-        'MyBlocObserver onError  cubit=$cubit  error=$error  stackTrace=$stackTrace');
-    super.onError(cubit, error, stackTrace);
-  }
 }
 
 enum CounterEvent { increment, reduce }
@@ -84,98 +58,113 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-class _TestRouteState extends State<TestRoute> {
+class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
   TestData _testData;
 
   _TestRouteState(this._testData);
 
-  Future<void> _increment() async {
-    bloc.add(CounterEvent.increment);
+  double size = 100.w;
+  Color col = Colors.red;
+  String text = 'abcdefg';
+  double radius = 0;
+  double opacity = 0.2;
+  Alignment alignment = Alignment.centerLeft;
+
+  int num = 0;
+  AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this)
+          ..addStatusListener((AnimationStatus status) {
+            // if (status == AnimationStatus.completed) {
+            //   animationController.reverse();
+            // } else if (status == AnimationStatus.dismissed) {
+            //   animationController.forward();
+            // }
+          });
+    // animationController.forward();
   }
 
-  Future<void> _reduce() async {
-    bloc.add(CounterEvent.reduce);
+  @override
+  dispose() {
+    super.dispose();
+    animationController.dispose();
   }
-
-  Widget _blocBuilder() {
-    return BlocBuilder<CounterBloc, int>(
-      cubit: bloc,
-      buildWhen: (previousState, state) {
-        return state.isEven;
-        // return state % 2 == 0;
-      },
-      builder: (context, state) {
-        return Container(
-          child: Text('_blocBuilder  state=$state'),
-        );
-      },
-    );
-  }
-
-  CounterBloc bloc = CounterBloc();
 
   @override
   Widget build(BuildContext context) {
-    Bloc.observer = MyBlocObserver();
-    // bloc.listen(print);
-    bloc.listen((s) {
-      setState(() {});
-    });
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('widget.title 👿'),
-      // ),
+      appBar: AppBar(
+        title: const Text('widget.title 👿'),
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              width: 120,
-              height: 120,
-              color: Colors.blue,
-              child: Center(
-                child: Text('topLeft'),
+          AnimatedContainer(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(radius), color: col),
+            duration: const Duration(seconds: 1),
+          ),
+          AnimatedAlign(
+            alignment: alignment,
+            duration: const Duration(seconds: 1),
+            child: const Text('text'),
+          ),
+          Container(
+            color: Colors.grey,
+            width: 60.w,
+            height: 60.w,
+            child: Center(
+              child: Transform.scale(
+                scale: 3,
+                child: AnimatedIcon(
+                  icon: AnimatedIcons.play_pause,
+                  progress: animationController,
+                ),
               ),
             ),
           ),
-          Center(
-              child: Container(
-                height: 80,
-            color: Colors.green,
-            child: Text('Center'),
-          )),
-          Align(
-            alignment: Alignment.bottomRight,
+          AnimatedOpacity(
             child: Container(
-              width: 120,
-              height: 120,
-              color: Colors.red,
-              child: Center(
-                child: Text('bottomRight'),
-              ),
-            ),
+              padding: EdgeInsets.all(10),
+              color: Colors.amber,
+              child: Text('AnimatedOpacity'),),
+            duration: Duration(seconds: 1),
+            opacity: opacity,
           ),
-          // Center(
-          //   child: Text('name=${_testData?.name}  age=${_testData?.age}'),
-          // ),
-          // Center(
-          //   child: Text('cubit=${bloc.state}'),
-          // ),
-          // RaisedButton(
-          //   onPressed: () {
-          //     _increment();
-          //   },
-          //   child: const Text('add 1'),
-          // ),
-          // RaisedButton(
-          //   onPressed: () {
-          //     _reduce();
-          //   },
-          //   child: const Text('reduce 1'),
-          // ),
-          // _blocBuilder(),
-          // _blocListener(),
+          InkWell(
+            onTap: () {
+              setState(() {
+                if (num.isEven) {
+                  size = 120.w;
+                  col = Colors.blue;
+                  text = 'hijklmnnnnn';
+                  radius = 30;
+                  alignment = Alignment.centerRight;
+                  animationController.forward();
+                  opacity = 0.8;
+                } else {
+                  size = 50.w;
+                  col = Colors.green;
+                  text = '12efgwehs';
+                  radius = 0;
+                  alignment = Alignment.centerLeft;
+                  animationController.reverse();
+                  opacity = 0.2;
+                }
+                num++;
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.all(50.w),
+              child: Text('change'),
+            ),
+          )
         ],
       ),
     );

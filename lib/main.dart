@@ -20,6 +20,9 @@ void main() {
           SystemChrome.setEnabledSystemUIOverlays(
               [SystemUiOverlay.top, SystemUiOverlay.bottom]);
         }
+        _runOnlyOnce('mgo', () {
+          Bloc.observer = MyBlocObserver();
+        });
 
         return MyApp();
       }),
@@ -46,6 +49,33 @@ class Global {
     await spInit();
 
     callback();
+  }
+}
+
+class MyBlocObserver extends BlocObserver {
+  @override
+  void onEvent(Bloc bloc, Object event) {
+    print('MyBlocObserver bloc = $bloc ; event = $event');
+    super.onEvent(bloc, event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    print('MyBlocObserver bloc = $bloc ; transition = $transition');
+    super.onTransition(bloc, transition);
+  }
+
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print('MyBlocObserver cubit = $cubit ; change = $change');
+    super.onChange(cubit, change);
+  }
+
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    print(
+        'MyBlocObserver onError  cubit=$cubit  error=$error  stackTrace=$stackTrace');
+    super.onError(cubit, error, stackTrace);
   }
 }
 
@@ -86,7 +116,8 @@ class MyAppState extends State<MyApp> {
           // Define the default font family.
           fontFamily: 'Nunito',
         ),
-        home: MainRoute(),
+        // home: MainRoute(),
+        home: TestRoute(null),
       ),
     );
   }
