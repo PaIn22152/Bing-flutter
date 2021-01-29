@@ -74,13 +74,16 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
                                 children: [
                                   Align(
                                     alignment: Alignment.topCenter,
-                                    child: CachedNetworkImage(
-                                      imageUrl: state.imgs[index].url,
-                                      placeholder: (context, url) =>
-                                          const CupertinoActivityIndicator(),
-                                      errorWidget:
-                                          (context, url, dynamic error) =>
-                                              const Icon(Icons.error),
+                                    child: Hero(
+                                      tag: state.imgs[index].enddate,
+                                      child: CachedNetworkImage(
+                                        imageUrl: state.imgs[index].url,
+                                        placeholder: (context, url) =>
+                                            const CupertinoActivityIndicator(),
+                                        errorWidget:
+                                            (context, url, dynamic error) =>
+                                                const Icon(Icons.error),
+                                      ),
                                     ),
                                   ),
                                   Container(

@@ -116,8 +116,8 @@ class MyAppState extends State<MyApp> {
           // Define the default font family.
           fontFamily: 'Nunito',
         ),
-        // home: MainRoute(),
-        home: TestRoute(null),
+        home: MainRoute(),
+        // home: TestRoute(null),
       ),
     );
   }

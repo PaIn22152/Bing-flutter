@@ -198,14 +198,17 @@ class MainRouteState extends BaseState<MainRoute> {
                       child: Container(
                         color: Colors.grey[850],
                         child: Center(
-                          child: CachedNetworkImage(
-                            imageUrl: state.imgBean.url,
-                            placeholder: (context, url) =>
-                                const CupertinoActivityIndicator(
-                              radius: 70,
+                          child: Hero(
+                            tag: state.imgBean.enddate,
+                            child: CachedNetworkImage(
+                              imageUrl: state.imgBean.url,
+                              placeholder: (context, url) =>
+                                  const CupertinoActivityIndicator(
+                                radius: 70,
+                              ),
+                              errorWidget: (context, url, dynamic error) =>
+                                  const Icon(Icons.error),
                             ),
-                            errorWidget: (context, url, dynamic error) =>
-                                const Icon(Icons.error),
                           ),
                         ),
                       ),

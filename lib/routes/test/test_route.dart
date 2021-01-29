@@ -66,9 +66,12 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
   double size = 100.w;
   Color col = Colors.red;
   String text = 'abcdefg';
-  double radius = 0;
+  double radius = 10;
   double opacity = 0.2;
+  double bigc = 2;
+  int maxlines = 2;
   Alignment alignment = Alignment.centerLeft;
+  BoxShape shape = BoxShape.rectangle;
 
   int num = 0;
   AnimationController animationController;
@@ -104,6 +107,9 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
         mainAxisSize: MainAxisSize.max,
         children: [
           AnimatedContainer(
+            alignment: alignment,
+            padding: EdgeInsets.all(radius),
+            margin: EdgeInsets.all(radius),
             width: size,
             height: size,
             decoration: BoxDecoration(
@@ -112,8 +118,59 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
           ),
           AnimatedAlign(
             alignment: alignment,
+            // heightFactor: bigc,
             duration: const Duration(seconds: 1),
             child: const Text('text'),
+          ),
+          // Container(
+          //   width: 100,
+          //   height: 100,
+          //   color: Colors.blue,
+          //   child: Stack(
+          //     children: [
+          //       AnimatedPositioned(
+          //         left: radius,
+          //         width: radius,
+          //         child: Text('AnimatedPositioned'),
+          //         duration: const Duration(seconds: 1),
+          //       )
+          //     ],
+          //   ),
+          // ),
+          // Container(
+          //   width: 100,
+          //   height: 100,
+          //   color: Colors.blue,
+          //   child: Stack(
+          //     children: [
+          //       AnimatedPositionedDirectional(
+          //         end: radius,
+          //         width: radius,
+          //         child: Text('A12345l'),
+          //         duration: const Duration(seconds: 1),
+          //       )
+          //     ],
+          //   ),
+          // ),
+          AnimatedDefaultTextStyle(
+            child: Container(
+              child: Text('123'),
+            ),
+            maxLines: maxlines,
+            style: TextStyle(color: col, fontSize: radius),
+            duration: Duration(seconds: 1),
+          ),
+          AnimatedPhysicalModel(
+            shadowColor: col,
+            color: col,
+            elevation: radius,
+            child: Container(
+              color: Colors.deepOrange,
+              width: 120.w,
+              height: 120.w,
+            ),
+            duration: Duration(seconds: 1),
+            shape: shape,
           ),
           Container(
             color: Colors.grey,
@@ -133,7 +190,8 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
             child: Container(
               padding: EdgeInsets.all(10),
               color: Colors.amber,
-              child: Text('AnimatedOpacity'),),
+              child: Text('AnimatedOpacity'),
+            ),
             duration: Duration(seconds: 1),
             opacity: opacity,
           ),
@@ -148,14 +206,20 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
                   alignment = Alignment.centerRight;
                   animationController.forward();
                   opacity = 0.8;
+                  bigc = 200;
+                  maxlines = 3;
+                  shape = BoxShape.circle;
                 } else {
                   size = 50.w;
                   col = Colors.green;
                   text = '12efgwehs';
-                  radius = 0;
+                  radius = 10;
                   alignment = Alignment.centerLeft;
                   animationController.reverse();
                   opacity = 0.2;
+                  bigc = 2;
+                  maxlines = 2;
+                  shape = BoxShape.rectangle;
                 }
                 num++;
               });
