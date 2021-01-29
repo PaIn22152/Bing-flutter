@@ -58,13 +58,74 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
+class GradientButton extends StatelessWidget {
+  GradientButton({
+    this.colors,
+    this.width,
+    this.height,
+    this.onPressed,
+    this.borderRadius,
+    @required this.child,
+  });
+
+  // 渐变色数组
+  final List<Color> colors;
+
+  // 按钮宽高
+  final double width;
+  final double height;
+
+  final Widget child;
+  final BorderRadius borderRadius;
+
+  //点击回调
+  final GestureTapCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
+    //确保colors数组不空
+    List<Color> _colors = colors ??
+        [theme.primaryColor, theme.primaryColorDark ?? theme.primaryColor];
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: _colors),
+        borderRadius: borderRadius,
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          splashColor: _colors.first,
+          highlightColor: Colors.transparent,
+          borderRadius: borderRadius,
+          onTap: onPressed,
+          child: ConstrainedBox(
+            constraints: BoxConstraints.tightFor(height: height, width: width),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DefaultTextStyle(
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  child: child,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
   TestData _testData;
 
   _TestRouteState(this._testData);
 
   double size = 100.w;
-  Color col = Colors.red;
+  Color col = Colors.red[300];
   String text = 'abcdefg';
   double radius = 10;
   double opacity = 0.2;
@@ -106,6 +167,19 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+          GradientButton(
+            colors: [Colors.grey, Colors.red],
+            height: 50.0,
+            child: Text("Submit"),
+            onPressed: (){},
+          ),
+          GradientButton(
+            borderRadius: BorderRadius.circular(10),
+            height: 50.0,
+            colors: [Colors.lightGreen, Colors.green[700]],
+            child: Text("Submit"),
+            onPressed: (){},
+          ),
           AnimatedContainer(
             alignment: alignment,
             padding: EdgeInsets.all(radius),

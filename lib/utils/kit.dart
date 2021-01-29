@@ -17,3 +17,8 @@ void toast(String msg) {
       webPosition: 'center',
       fontSize: 16.0);
 }
+
+Future<void> toastCancel() async {
+  final bool b = await Fluttertoast.cancel();
+  logD('toastCancel  b=$b');
+}

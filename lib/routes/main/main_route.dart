@@ -120,6 +120,8 @@ class MainRouteState extends BaseState<MainRoute> {
 
   Future<bool> _exitApp() {
     if (_doubleClick) {
+      logD(' _exitApp ');
+      toastCancel();
       return Future.value(true);
     } else {
       _doubleClick = true;
@@ -153,16 +155,6 @@ class MainRouteState extends BaseState<MainRoute> {
         name: name);
     logD('_getHttp result=$result');
     toast(toastSavedImg + (result['filePath'] as String));
-  }
-
-  @override
-  void initState() {
-    SystemChrome.setApplicationSwitcherDescription(
-        const ApplicationSwitcherDescription(
-      label: 'newnnewlab',
-      primaryColor: 0xffff0000,
-    ));
-    super.initState();
   }
 
   @override
