@@ -51,6 +51,13 @@ dependencies:
   #图片缩放
   flutter_drag_scale:
     git: https://github.com/LiuC520/flutter_drag_scale.git
+  # web view
+  webview_flutter: ^1.0.7
+
+
+  # 本地plugins
+  screen_light:
+    path: plugins/screen_light
 
 dev_dependencies:
   flutter_test:

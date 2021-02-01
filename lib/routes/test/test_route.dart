@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:bing_flutter/my_all_imports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:screen_light/screen_light.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 ///测试用路由，会在此写一些测试用代码
 ///
@@ -156,10 +160,56 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
   dispose() {
     super.dispose();
     animationController.dispose();
+    ScreenLight.instance.unlistenSysScreenLight();
   }
+
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
+  WebViewController instanceWebController;
+
+  void _() async {
+    // final light = await ScreenLight.instance.getSysScreenLight();
+    // logD('getSysScreenLight=$light');
+    //
+    // bool b2 = await ScreenLight.instance.setAppScreenLight(255);
+    // logD('b2=$b2');
+    // final light2 = await ScreenLight.instance.getAppScreenLight();
+    // logD('getAppScreenLight2=$light2');
+
+    ScreenLight.instance.listenSysScreenLight((light, selfChange) {
+      logD('flutter  light=$light   self=$selfChange');
+    });
+
+    // bool b3 = await ScreenLight.instance.setAppScreenLight(251);
+    // logD('b3=$b3');
+    // final light23 = await ScreenLight.instance.getAppScreenLight();
+    // logD('getAppScreenLight23=$light23');
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    _controller.future.then((data) {
+      instanceWebController = data;
+    });
+
+    _();
+
+    // return Scaffold(
+    //   body: WillPopScope(
+    //     onWillPop: () {
+    //       // instanceWebController.goBack();
+    //       return Future.value(true);
+    //     },
+    //     child: const WebView(
+    //       // initialUrl: 'https://flutter.dev',
+    //       // initialUrl: 'https://www.google.com.hk/?hl=zh-CN',
+    //       initialUrl: 'http://payne.fun/',
+    //       javascriptMode: JavascriptMode.unrestricted,
+    //     ),
+    //   ),
+    // );
     return Scaffold(
       appBar: AppBar(
         title: const Text('widget.title 👿'),
@@ -171,14 +221,14 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
             colors: [Colors.grey, Colors.red],
             height: 50.0,
             child: Text("Submit"),
-            onPressed: (){},
+            onPressed: () {},
           ),
           GradientButton(
             borderRadius: BorderRadius.circular(10),
             height: 50.0,
             colors: [Colors.lightGreen, Colors.green[700]],
             child: Text("Submit"),
-            onPressed: (){},
+            onPressed: () {},
           ),
           AnimatedContainer(
             alignment: alignment,
