@@ -66,41 +66,53 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
                       controller: _scrollController,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
-                          title: Container(
-                              width: 360.w,
-                              height: 200.w,
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 10.w),
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Hero(
-                                      tag: state.imgs[index].enddate,
-                                      child: CachedNetworkImage(
-                                        imageUrl: state.imgs[index].url,
-                                        placeholder: (context, url) =>
-                                            const CupertinoActivityIndicator(),
-                                        errorWidget:
-                                            (context, url, dynamic error) =>
-                                                const Icon(Icons.error),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 360.w,
-                                    height: 40.w,
-                                    color: historyDateBg,
-                                    child: Center(
-                                      child: Text(
-                                        state.imgs[index].enddate,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15.sp),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )),
+                          title: ClipRRect(
+                            borderRadius: BorderRadius.circular(6.w),
+                            child: Container(
+                                width: 360.w,
+                                height: 180.w,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6.w),
+                                  border: Border.all(
+                                      color: Colors.grey, width: 2.w),
+                                ),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(3.w),
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Hero(
+                                            tag: state.imgs[index].enddate,
+                                            child: CachedNetworkImage(
+                                              width: 360.w,
+                                              height: 180.w,
+                                              fit: BoxFit.cover,
+                                              imageUrl: state.imgs[index].url,
+                                              placeholder: (context, url) =>
+                                                  const CupertinoActivityIndicator(),
+                                              errorWidget: (context, url,
+                                                      dynamic error) =>
+                                                  const Icon(Icons.error),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 360.w,
+                                          height: 40.w,
+                                          color: historyDateBg,
+                                          child: Center(
+                                            child: Text(
+                                              state.imgs[index].enddate,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15.sp),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ))),
+                          ),
                           onTap: () {
                             logD('onTap');
                             Navigator.pop(context, state.imgs[index]);
