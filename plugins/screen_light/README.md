@@ -1,6 +1,6 @@
 # screen_light
 
-A Flutter plugin for screen light.
+flutter插件，获取系统屏幕亮度，作为插件开发学习用项目
 
 ## Getting Started
 

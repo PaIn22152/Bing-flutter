@@ -77,7 +77,7 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
                                       color: Colors.grey, width: 2.w),
                                 ),
                                 child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(3.w),
+                                    borderRadius: BorderRadius.circular(4.w),
                                     child: Stack(
                                       children: [
                                         Align(
@@ -129,7 +129,11 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
                               width: 60.w,
                               height: 50.w,
                               decoration: BoxDecoration(
-                                color: const Color(0x88000000),
+                                border: Border.all(
+                                  color: color_theme,
+                                  width: 2.w,
+                                ),
+                                color: const Color(0x33000000),
                                 borderRadius: BorderRadius.circular(7.w),
                               ),
                               child: Container(

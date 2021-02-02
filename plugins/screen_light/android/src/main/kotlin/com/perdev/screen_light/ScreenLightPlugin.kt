@@ -19,21 +19,21 @@ import java.util.*
 class ScreenLightPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler {
     
     ///唯一通道名
-    val _channel_name = "payne/perdev/screen_light"
+    private val _channelName = "payne/perdev/screen_light"
     
     ///方法名
-    val _getSysScreenLight = "getSysScreenLight"
-    val _listenSysScreenLight = "listenSysScreenLight"
-    val _unlistenSysScreenLight = "unlistenSysScreenLight"
-    val _setAppScreenLight = "setAppScreenLight"
-    val _getAppScreenLight = "getAppScreenLight"
+    private val _getSysScreenLight = "getSysScreenLight"
+    private val _listenSysScreenLight = "listenSysScreenLight"
+    private val _unlistenSysScreenLight = "unlistenSysScreenLight"
+    private val _setAppScreenLight = "setAppScreenLight"
+    private val _getAppScreenLight = "getAppScreenLight"
     
     ///参数名
-    val _argLight = "argLight"
-    val _argSelfChange = "argSelfChange"
+    private val _argLight = "argLight"
+    private val _argSelfChange = "argSelfChange"
     
     ///回调方法名
-    val _callbackSysScreenLightChanged = "callbackSysScreenLightChanged"
+    private val _callbackSysScreenLightChanged = "callbackSysScreenLightChanged"
     
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
@@ -52,7 +52,7 @@ class ScreenLightPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCall
     
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         context = flutterPluginBinding.applicationContext
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, _channel_name)
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, _channelName)
         channel.setMethodCallHandler(this)
     }
     
