@@ -1,8 +1,9 @@
 name: screen_light
 description: flutter插件，获取系统屏幕亮度，作为插件开发学习用项目
 version: 0.0.1
-author: payne_xy@163.com
+# author: payne_xy@163.com
 homepage: http://payne.fun/
+repository: https://github.com/PaIn22152/Bing-flutter/tree/master/plugins/screen_light
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
