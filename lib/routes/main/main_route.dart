@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_drag_scale/flutter_drag_scale.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -179,8 +178,7 @@ class MainRouteState extends BaseState<MainRoute> {
               state is ImgRefreshState) {
             return Stack(
               children: [
-                DragScaleContainer(
-                  doubleTapStillScale: true,
+                InteractiveViewer(
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     child: GestureDetector(
@@ -206,6 +204,9 @@ class MainRouteState extends BaseState<MainRoute> {
                       ),
                     ),
                   ),
+                  maxScale: 3.0,
+                  minScale: 1.0,
+                  scaleEnabled: true,
                 ),
                 Positioned(
                   bottom: 0,

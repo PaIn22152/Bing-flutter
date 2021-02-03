@@ -38,6 +38,15 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
     super.initState();
   }
 
+  ///20210202 -> 2021-02-02
+  String _title(String enddate) {
+    return enddate.substring(0, 4) +
+        '-' +
+        enddate.substring(4, 6) +
+        '-' +
+        enddate.substring(6);
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -103,7 +112,7 @@ class _HistoryRouteState extends BaseState<HistoryRoute>
                                           color: historyDateBg,
                                           child: Center(
                                             child: Text(
-                                              state.imgs[index].enddate,
+                                              _title(state.imgs[index].enddate),
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 15.sp),

@@ -48,14 +48,14 @@ dependencies:
   flutter_bloc: ^6.1.1
   # 路由管理
   fluro: ^1.7.8
-  #图片缩放
-  flutter_drag_scale:
-    git: https://github.com/LiuC520/flutter_drag_scale.git
   # web view
   webview_flutter: ^1.0.7
+#  # 屏幕亮度
+#  screen_light: ^0.0.1
 
 
   # 本地plugins
+  # 屏幕亮度
   screen_light:
     path: plugins/screen_light
 

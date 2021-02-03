@@ -153,15 +153,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  flutter_drag_scale:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "56e8fdc3ce14be1bcffa96cda9fc61ef40d63462"
-      url: "https://github.com/LiuC520/flutter_drag_scale.git"
-    source: git
-    version: "0.0.1"
   flutter_screenutil:
     dependency: "direct main"
     description:
