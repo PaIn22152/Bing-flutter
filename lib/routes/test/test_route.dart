@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:screen_light/screen_light.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 ///测试用路由，会在此写一些测试用代码
 ///
@@ -163,9 +162,7 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
     ScreenLight.instance.unlistenSysScreenLight();
   }
 
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-  WebViewController instanceWebController;
+
 
   void _() async {
     // final light = await ScreenLight.instance.getSysScreenLight();
@@ -190,9 +187,6 @@ class _TestRouteState extends State<TestRoute> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _controller.future.then((data) {
-      instanceWebController = data;
-    });
 
     _();
 

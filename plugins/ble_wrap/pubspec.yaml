@@ -1,0 +1,29 @@
+name: ble_wrap
+description: 基于插件flutter_blue的封装
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  #在类FlutterBluePlugin第998处，会发生空指针异常，使用本地库
+  flutter_blue: ^0.8.0   #蓝牙
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.perdev.ble_wrap
+        pluginClass: BleWrapPlugin
+      ios:
+        pluginClass: BleWrapPlugin
+
