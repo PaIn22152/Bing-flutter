@@ -11,7 +11,7 @@ description: 基于bing的接口实现的每日一图flutter版，学习用
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.2.3+23
+version: 2.2.4+24
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -25,7 +25,7 @@ dependencies:
   # 网络请求
   dio: ^3.0.10
   # Toast土司
-  fluttertoast: ^7.1.6
+  fluttertoast: 7.1.6
   # 权限申请
   permission_handler: ^5.0.1+1
   # 图片保存
@@ -43,7 +43,7 @@ dependencies:
   # 时间格式化
   date_format: ^1.0.9
   # 屏幕适配
-  flutter_screenutil: ^4.0.2+3
+  flutter_screenutil: 4.0.2+3
   # 状态管理
   flutter_bloc: ^6.1.1
   # 路由管理
